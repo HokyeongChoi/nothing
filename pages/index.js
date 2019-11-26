@@ -1,36 +1,68 @@
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import fes from "../2019.json";
+import dynamic from "next/dynamic";
+import TemporaryDrawer from "../components/TemporaryDrawer.js";
+import Helmet from "../components/Helmet.js";
 
+const LeafMap = dynamic(() => import("../components/LeafMap"), {
+  ssr: false
+});
 
 const Index = () => {
+  const [height, setHeight] = useState(null);
 
-  Date.prototype.toDateInputValue = (function () {
-    var local = new Date(this);
-    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-    return local.toJSON().slice(0, 10);
-  });
+  if (process.browser) {
+    useEffect(() => {
+      setHeight(window.innerHeight);
+    }, [window.innerHeight]);
+  }
+
+  const resizeHandler = () => {
+    setHeight(window.innerHeight);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", resizeHandler);
+    resizeHandler();
+    return function cleanup() {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
 
   return (
     <>
-      <label for="male">
-        <input type="radio" name="gender" value="male" id="male"></input>
-        남자
-      </label>
-      <label for="female">
-        <input type="radio" name="gender" value="female" id="female"></input>
-        여자
-      </label><br></br>
-      나이:
-      <input type="text" value="" id="age"></input><br></br>
-      관심사:
-      <input type="text" value="" id="interest"></input><br></br>
-      날짜:
-      <input type="date" defaultValue={new Date().toDateInputValue()} id="date"></input><br></br>
-      <Link href="fest">
-        <button>축제 검색</button>
-      </Link>
+      <Helmet />
+      <div className="root2">
+        <TemporaryDrawer fes={fes} height={height}></TemporaryDrawer>
+        <div className="tabs"></div>
+      </div>
+      <LeafMap fes={fes} full={true} height={height}></LeafMap>
+      <style jsx global>{`
+        body {
+          padding: 0;
+          margin: 0;
+        }
+        html,
+        body {
+          height: 100vh;
+          width: 100vw;
+        }
+      `}</style>
+      <style jsx>{`
+        .root2 {
+          display: flex;
+          flex-direction: row;
+          color: rgba(0, 0, 0, 0.87);
+          background-color: #f5f5f5;
+          position: static;
+          min-height: 48px;
+        }
+        .tabs {
+          flex-grow: 0.9;
+        }
+      `}</style>
     </>
-  )
+  );
 };
-
 
 export default Index;
