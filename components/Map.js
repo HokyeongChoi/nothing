@@ -1,16 +1,61 @@
 import React, { useEffect } from 'react';
 import L from 'leaflet';
 
-
-const LeafMap = ({ fes, res }) => {
+const LeafMap = ({ fes, res, full }) => {
 
     const Icon = L.icon({
         iconUrl: '/icon.png',
         iconSize: [20, 30]
     });
 
+    let style;
+    if (full) {
+        style = <style jsx>{`
+                            #map {
+                                height: 100vh;
+                                width: 100vw;
+                                
+                            }
+                            img {
+                                width: 10vw;
+                                height: 10vw;
+                            }
+                            .leaflet-control-zoom{
+                                display: none;
+                            }
+                        `}</style>;
+    } else {
+        style = <style jsx>{`
+                            #map {
+                                height: 40vh;
+                            }
+                        `}</style>;
+    }
+
     useEffect(() => {
-        let map = L.map('map').setView([fes.y, fes.x], 15);
+        let map, marker;
+        if (full) {
+            map = L.map('map').setView([37.564214, 127.001699], 12);
+            for (let f of fes) {
+                L.marker(
+                    [f.y, f.x],
+                ).bindPopup(
+                    `${f.name}<br><img src='img/${f.id}.jpg'></img>`
+                ).addTo(map);
+            }
+        } else {
+            map = L.map('map').setView([fes.x, fes.y], 15);
+            marker = L.marker([fes.y, fes.x]).bindPopup(fes.name)
+                .addTo(map).openPopup();
+            for (let r of res) {
+                L.marker(
+                    [r.y, r.x],
+                    { icon: Icon }
+                ).bindPopup(
+                    `${r.place_name}\n<a href=${r.place_url}>${r.place_url}</a>`
+                ).addTo(map);
+            }
+        }
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -19,29 +64,16 @@ const LeafMap = ({ fes, res }) => {
             accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
         }).addTo(map);
 
-        let marker = L.marker([fes.y, fes.x]).bindPopup(fes.name)
-            .addTo(map).openPopup();
 
         let layer = L.layerGroup().addTo(map);
 
-        for (let r of res) {
-            L.marker(
-                [r.y, r.x],
-                {icon: Icon}
-            ).bindPopup(
-                `${r.place_name}\n<a href=${r.place_url}>${r.place_url}</a>`
-            ).addTo(map);
-        }
     }, [])
-    
+
     return (
         <div>
             <div id='map'></div>
-            <style jsx>{`
-        #map {
-            height: 40vh;
-        }
-    `}</style>
+
+            {style}
         </div>
     );
 }

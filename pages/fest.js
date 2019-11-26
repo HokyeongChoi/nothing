@@ -1,5 +1,6 @@
-import fetch from 'isomorphic-unfetch';
+// import fetch from 'isomorphic-unfetch';
 import Link from 'next/link';
+import fes from '../2019.json';
 
 const FesList = ({ fes }) => {
 
@@ -53,31 +54,31 @@ const FesList = ({ fes }) => {
 
 FesList.getInitialProps = async function () {
 
-    const response = await fetch(`https://dollhy.pythonanywhere.com/festival`);
-    let fes = await response.json();
-    const re = /\b(\d{1,2})(\.|월)\s?(\d{1,2})/g;
-    const arr = [];
-    for (let f of fes) {
-        let matches = re.exec(f.period);
-        if (!matches) continue;
-        let last = [Number(matches[1]), Number(matches[3])];
-        while (matches = re.exec(f.period)) {
-            let temp = [Number(matches[1]), Number(matches[3])];
-            if (last[0] * 40 + last[1] > temp[0] * 40 + temp[1]) {
-                last = temp;
-            }
-        }
-        f.date = { month: last[0], day: last[1] };
-        arr.push(f);
-    }
-    arr.sort((a, b) => {
-        if (a.date.month * 40 + a.date.day < b.date.month * 40 + b.date.day) {
-            return -1
-        } else {
-            return a.date.month * 40 + a.date.day > b.date.month * 40 + b.date.day ? 1 : 0;
-        }
-    });
-    fes = arr;
+    // const response = await fetch(`https://dollhy.pythonanywhere.com/festival`);
+    // let fes = await response.json();
+    // const re = /\b(\d{1,2})(\.|월)\s?(\d{1,2})/g;
+    // const arr = [];
+    // for (let f of fes) {
+    //     let matches = re.exec(f.period);
+    //     if (!matches) continue;
+    //     let last = [Number(matches[1]), Number(matches[3])];
+    //     while (matches = re.exec(f.period)) {
+    //         let temp = [Number(matches[1]), Number(matches[3])];
+    //         if (last[0] * 40 + last[1] > temp[0] * 40 + temp[1]) {
+    //             last = temp;
+    //         }
+    //     }
+    //     f.date = { month: last[0], day: last[1] };
+    //     arr.push(f);
+    // }
+    // arr.sort((a, b) => {
+    //     if (a.date.month * 40 + a.date.day < b.date.month * 40 + b.date.day) {
+    //         return -1
+    //     } else {
+    //         return a.date.month * 40 + a.date.day > b.date.month * 40 + b.date.day ? 1 : 0;
+    //     }
+    // });
+    // fes = arr;
 
     return {
         fes: fes
