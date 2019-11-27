@@ -14,7 +14,7 @@ import Link from 'next/link';
 
 const useStyles = makeStyles({
     list: {
-        width: 250,
+        width: "67vmin",
     },
     btn: {
         backgroundColor: '#e06f84',
@@ -68,8 +68,8 @@ export default function TemporaryDrawer( {fes} ) {
             </List>
             <style jsx>{`
                 img {
-                    width: 50vw;
-                    height: 50vw;
+                    width: 50vmin;
+                    height: 50vmin;
                 }
                 a {
                     text-decoration: none;
@@ -77,10 +77,12 @@ export default function TemporaryDrawer( {fes} ) {
                     cursor: pointer;
                     background-color: #f9f9f9;
                     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                    width: 50vw;
+                    width: 50vmin;
                     padding: 4px 4px;
                 }
-                
+                p {
+                    margin: 4%;
+                }
             `}</style>
 
         </div>

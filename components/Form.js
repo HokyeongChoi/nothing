@@ -27,8 +27,12 @@ const Form = () => {
       <input type="date" defaultValue={new Date().toDateInputValue()} id="date"></input><br></br>
 
           <button>축제 검색</button>
-
         </div>
+        <style jsx>{`
+          .dropdown {
+            padding: 4%;
+          }
+        `}</style>
       </div>
     </>
   )
