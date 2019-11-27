@@ -1,7 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import L from 'leaflet';
 
+let map, marker, layer;
+
 const LeafMap = ({ fes, res, full }) => {
+
+    const [init, setInit] = useState(true);
 
     const Icon = L.icon({
         iconUrl: '/icon.png',
@@ -14,7 +18,7 @@ const LeafMap = ({ fes, res, full }) => {
                             #map {
                                 height: 100vh;
                                 width: 100vw;
-                                
+                                z-index: 1;
                             }
                             img {
                                 width: 10vw;
@@ -33,7 +37,6 @@ const LeafMap = ({ fes, res, full }) => {
     }
 
     useEffect(() => {
-        let map, marker;
         if (full) {
             map = L.map('map').setView([37.564214, 127.001699], 12);
             for (let f of fes) {
@@ -44,7 +47,10 @@ const LeafMap = ({ fes, res, full }) => {
                 ).addTo(map);
             }
         } else {
-            map = L.map('map').setView([fes.x, fes.y], 15);
+            if (!init) {
+                map.remove();
+            }
+            map = L.map('map').setView([fes.y, fes.x], 15);
             marker = L.marker([fes.y, fes.x]).bindPopup(fes.name)
                 .addTo(map).openPopup();
             for (let r of res) {
@@ -55,19 +61,22 @@ const LeafMap = ({ fes, res, full }) => {
                     `${r.place_name}\n<a href=${r.place_url}>${r.place_url}</a>`
                 ).addTo(map);
             }
+            setInit(false);
         }
 
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox.streets',
-            accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
+        // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        //     maxZoom: 18,
+        //     id: 'mapbox.streets',
+        //     accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
+        // }).addTo(map);
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        layer = L.layerGroup().addTo(map);
 
-        let layer = L.layerGroup().addTo(map);
-
-    }, [])
+    }, [fes]);
 
     return (
         <div>
