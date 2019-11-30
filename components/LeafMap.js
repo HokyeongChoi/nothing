@@ -3,8 +3,7 @@ import L from 'leaflet';
 
 let map, marker, layer;
 
-const LeafMap = ({ fes, res, full }) => {
-
+const LeafMap = ({ fes, res, full, invalidate }) => {
     const [init, setInit] = useState(true);
 
     const Icon = L.icon({
@@ -31,8 +30,12 @@ const LeafMap = ({ fes, res, full }) => {
     } else {
         style = <style jsx>{`
                             #map {
-                                height: 40vh;
+                                width: 90vw;
+                                height: 40vmax;
+                                position: relative;
+                                margin-left: 2.5vmin;
                             }
+                            
                         `}</style>;
     }
 
@@ -46,7 +49,11 @@ const LeafMap = ({ fes, res, full }) => {
                     `${f.name}<br><img src='img/${f.id}.jpg'></img>`
                 ).addTo(map);
             }
-        } else {
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        } else if (invalidate) {
+            // console.log("invalidate");
             if (!init) {
                 map.remove();
             }
@@ -62,24 +69,24 @@ const LeafMap = ({ fes, res, full }) => {
                 ).addTo(map);
             }
             setInit(false);
+            // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            //     maxZoom: 18,
+            //     id: 'mapbox.streets',
+            //     accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
+            // }).addTo(map);
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            layer = L.layerGroup().addTo(map);
         }
+    }, [fes, invalidate])
 
-        // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        //     maxZoom: 18,
-        //     id: 'mapbox.streets',
-        //     accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
-        // }).addTo(map);
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
 
-        layer = L.layerGroup().addTo(map);
-
-    }, [fes]);
 
     return (
-        <div>
+        <div className="mapContainer">
             <div id='map'></div>
 
             {style}

@@ -1,18 +1,22 @@
 import fetch from 'isomorphic-unfetch';
 import Head from 'next/head';
-import Restaurant from '../../components/Restaurant';
-import dynamic from 'next/dynamic';
-import TemporaryDrawer from '../../components/TemporaryDrawer';
 import fes from '../../2019.json';
+import FullWidthTabs from '../../components/FullWidthTabs';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
-const LeafMap = dynamic(
-  () => import('../../components/Map'),
-  {
-    ssr: false
-  }
-)
 
 const Info = ({ fe, res }) => {
+
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#8ebdd8',
+        contrastText: 'white'
+      }
+    },
+  });
+
   return (
     <>
       <Head>
@@ -26,49 +30,10 @@ const Info = ({ fe, res }) => {
           crossorigin=""></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
       </Head>
-      <TemporaryDrawer fes={fes}></TemporaryDrawer>
-      <div>
-        <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
-      </div>
-      <p className="info-name">{fe.name}</p>
-      <LeafMap fes={fe} res={res} class="map"></LeafMap>
-      <ul>
-        {res.map(res => 
-          (
-            <li className="info-li" key={res.id}>
-              <Restaurant res={res}></Restaurant>
-            </li>
-          )
-        )}
-      </ul>
-      <footer>
-        <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
-                    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-      </footer>
-      <style jsx>{`
-        body {
-          padding: 0;
-          margin: 0;
-        }
-        html, body {
-          height: 100vh;
-          width: 100vw;
-        }
-        .info-img {
-          display: block;
-          width: 90vw;
-          border: solid;
-          margin: 2vw;
-        }
-        .info-name {
-          margin-left: 3vw;
-          margin-bottom: 5vw;
-        }
-        .info-li {
-          list-style-type: none;
-          margin-bottom: 5vw;
-        }
-      `}</style>
+      <ThemeProvider theme={theme}>
+        <FullWidthTabs fe={fe} res={res} fes={fes}></FullWidthTabs>
+      </ThemeProvider>
+
     </>
   )
 }

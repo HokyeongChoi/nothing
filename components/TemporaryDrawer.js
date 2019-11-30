@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
 // import fes from '../2019.json';
 import Link from 'next/link';
+import MenuIcon from '@material-ui/icons/Menu';
 
 
 const useStyles = makeStyles({
@@ -17,12 +17,12 @@ const useStyles = makeStyles({
         width: "67vmin",
     },
     btn: {
-        backgroundColor: '#e06f84',
-        color: 'white'
+        
+        zIndex: 2
     }
 });
 
-export default function TemporaryDrawer( {fes} ) {
+export default function TemporaryDrawer({ fes }) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         left: false
@@ -90,17 +90,11 @@ export default function TemporaryDrawer( {fes} ) {
 
     return (
         <div>
-            <div className="btn">
-                <Button onClick={toggleDrawer('left', true)} className={classes.btn}>Click Here!</Button>
-            </div>
+            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} />
+
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
                 {sideList('left')}
             </Drawer>
-            <style jsx>{`
-                .btn {
-                    z-index: 2;
-                }
-            `}</style>
         </div>
     );
 }

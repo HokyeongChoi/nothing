@@ -5,7 +5,7 @@ import TemporaryDrawer from '../components/TemporaryDrawer.js';
 
 
 const LeafMap = dynamic(
-  () => import('../components/Map'),
+  () => import('../components/LeafMap'),
   {
     ssr: false
   }
