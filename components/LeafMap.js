@@ -3,7 +3,7 @@ import L from 'leaflet';
 
 let map, marker, layer;
 
-const LeafMap = ({ fes, res, full, invalidate }) => {
+const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
     const [init, setInit] = useState(true);
 
     const Icon = L.icon({
@@ -35,7 +35,12 @@ const LeafMap = ({ fes, res, full, invalidate }) => {
                                 position: relative;
                                 margin-left: 2.5vmin;
                             }
-                            
+                            // .mapContainer {
+                            //     position: fixed;
+                            //     top: 22vmin;
+                            //     left: 103.5vw;
+                            //     overflow: hidden
+                            // }
                         `}</style>;
     }
 
@@ -86,7 +91,19 @@ const LeafMap = ({ fes, res, full, invalidate }) => {
 
 
     return (
-        <div className="mapContainer">
+        <div className="mapContainer"
+            onTouchStart={
+                (preventSwipe)
+                &&
+                (e => {
+                    preventSwipe(true);
+                    function unregisterSwipe() {
+                        preventSwipe(false);
+                        window.removeEventListener('touchend', unregisterSwipe);
+                    }
+                    window.addEventListener('touchend', unregisterSwipe)
+                })}
+        >
             <div id='map'></div>
 
             {style}

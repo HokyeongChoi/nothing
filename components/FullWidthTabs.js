@@ -92,6 +92,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function FullWidthTabs({ fe, res, fes }) {
     const [orientation, setOrientation] = useState(1);
+    const [disabled, setDisabled] = useState(false);
 
     const rotateHandler = () => {
         setOrientation(window.innerWidth < window.innerHeight);
@@ -99,6 +100,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
 
     useEffect(() => {
         window.addEventListener('resize', rotateHandler);
+        if (!(window.innerWidth < window.innerHeight)) rotateHandler(window.innerWidth < window.innerHeight);
     }, [])
 
     const classes = useStyles();
@@ -133,6 +135,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 index={value}
                 onChangeIndex={handleChangeIndex}
                 className={classes.panel}
+                disabled={disabled}
             >
                 <TabPanel value={value} index={0} dir={theme.direction} >
                     <div className={classes.scrollContainerMain}>
@@ -145,7 +148,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     </div>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1}></LeafMap>
+                    <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
                     <div className={classes.scrollContainer}>
                         <div className={classes.scroll}>
                             <ul className={classes.ul}>
