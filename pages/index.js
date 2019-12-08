@@ -27,16 +27,16 @@ const Index = () => {
       </Head>
       <TemporaryDrawer fes={fes}></TemporaryDrawer>
       <LeafMap fes={fes} full={true}></LeafMap>
-      <style jsx>{`
-        body {
-          padding: 0;
-          margin: 0;
-        }
-        html, body {
-            height: 100vh;
-            width: 100vw;
-        }
-      `}</style>
+      <style jsx global>{`
+                body {
+                    padding: 0;
+                    margin: 0;
+                }
+                html, body {
+                    height: 100vh;
+                    width: 100vw;
+                }
+            `}</style>
     </>
   )
 };
