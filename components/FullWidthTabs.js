@@ -9,8 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import Restaurant from './Restaurant';
 import dynamic from 'next/dynamic';
 import TemporaryDrawer from './TemporaryDrawer';
-import Chart from './Chart';
-
+import BarChart from './BarChart';
+import clt from '../clt_labels.json';
+import Pie from './Pie';
 
 const LeafMap = dynamic(
     () => import('./LeafMap'),
@@ -83,6 +84,12 @@ const useStyles = makeStyles(theme => ({
         paddingInlineStart: '5vw',
         paddingInlineEnd: '5vw'
     },
+    gridContainer1: {
+        display: 'grid',
+        gridTemplateRows: 'minmax(256px, 1fr) 40vmax 40vmax',
+        gridAutoColumns: '100%',
+        // justifyItems: ''
+    },
     gridContainer: {
         display: 'grid',
         gridTemplateRows: 'minmax(256px, 1fr) 40vmax',
@@ -92,8 +99,11 @@ const useStyles = makeStyles(theme => ({
     main: {
 
     },
-    gridChart: {
-
+    bar: {
+        position: 'relative'
+    },
+    pie: {
+        position: 'relative'
     },
     gridItem1: {
         // position: 'absolute',
@@ -151,12 +161,17 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 disabled={disabled}
             >
                 <TabPanel value={value} index={0} dir={theme.direction} >
-                    <div className={classes.gridContainer}>
+                    <div className={classes.gridContainer1}>
                         <div className={classes.main}>
                             <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
                             <p className="info-name">{fe.name}</p>
                         </div>
-                            <Chart data={[0.1,0.2,0.3,0.2,0.1,0.1]} />
+                        <div className={classes.bar}>
+                            <BarChart data={clt[fe.cluster.toString()]} />
+                        </div>
+                        <div className={classes.pie}>
+                            <Pie man={fe.man} />
+                        </div>
                     </div>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
@@ -199,7 +214,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 
                 .info-img {
                     display: block;
-                    width: 90vw;
+                    width: 90vmin;
                     border: solid;
                     margin: 10px auto;
                 }

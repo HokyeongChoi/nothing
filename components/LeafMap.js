@@ -10,11 +10,11 @@ function isInside(marker, poly) {
     const x = marker.y, y = marker.x;
 
     let inside = false;
-    for (var i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
-        var xi = polyPoints[i][1], yi = polyPoints[i][0];
-        var xj = polyPoints[j][1], yj = polyPoints[j][0];
+    for (let i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
+        let xi = polyPoints[i][1], yi = polyPoints[i][0];
+        let xj = polyPoints[j][1], yj = polyPoints[j][0];
 
-        var intersect = ((yi > y) != (yj > y))
+        let intersect = ((yi > y) != (yj > y))
             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
         if (intersect) inside = !inside;
     }
@@ -91,7 +91,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
                 map.addLayer(l[0]);
             }
 
-            layer.removeEventListener("click", zoomOutHandler);
+            map.removeEventListener("click", zoomOutHandler);
             layer.addEventListener("click", zoomInHandler);
         };
 
@@ -105,7 +105,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
             map.addLayer(festLayer);
 
             layer.removeEventListener("click", zoomInHandler);
-            layer.addEventListener("click", zoomOutHandler);
+            map.addEventListener("click", zoomOutHandler);
         }
         
 
