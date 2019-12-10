@@ -7,7 +7,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
-// import fes from '../2019.json';
 import Link from 'next/link';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -18,7 +17,6 @@ const useStyles = makeStyles({
         maxWidth: "300px"
     },
     btn: {
-        
         zIndex: 2
     }
 });
@@ -55,13 +53,15 @@ export default function TemporaryDrawer({ fes }) {
                             x: fes.x,
                             y: fes.y,
                             cluster: fes.cluster,
-                            man: fes.man
+                            man: fes.man,
+                            exp: fes.explanation.replace(/(\\(n|t))/g, '')
                         })}`}>
                             <a>
                                 <ListItemIcon>
                                     <img src={`/img/${fes.id}.jpg`}></img>
                                 </ListItemIcon>
                                 <ListItemText primary={fes.name} />
+                                <span>{fes.period}</span>
                             </a>
                         </Link>
                     </ListItem>

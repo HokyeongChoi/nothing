@@ -100,17 +100,15 @@ const useStyles = makeStyles(theme => ({
 
     },
     bar: {
-        position: 'relative'
+        position: 'relative',
+        width: '90vmin',
+        margin: '10px auto'
     },
     pie: {
-        position: 'relative'
+        position: 'relative',
+        width: '90vmin',
+        margin: '10px auto'
     },
-    gridItem1: {
-        // position: 'absolute',
-        // top: 0,
-        // left: 0,
-        // gridRow: 1 / 2
-    }
 }));
 
 export default function FullWidthTabs({ fe, res, fes }) {
@@ -165,6 +163,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                         <div className={classes.main}>
                             <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
                             <p className="info-name">{fe.name}</p>
+                            <p className="info-name">{fe.exp}</p>
                         </div>
                         <div className={classes.bar}>
                             <BarChart data={clt[fe.cluster.toString()]} />
