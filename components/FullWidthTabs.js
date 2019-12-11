@@ -12,6 +12,14 @@ import TemporaryDrawer from './TemporaryDrawer';
 import BarChart from './BarChart';
 import clt from '../clt_labels.json';
 import Pie from './Pie';
+//
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Form from './Form';
+import Link from 'next/link';
 
 const LeafMap = dynamic(
     () => import('./LeafMap'),
@@ -56,24 +64,30 @@ const useStyles = makeStyles(theme => ({
         width: '100vw',
     },
     root2: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        position: 'sticky',
+        top: 0
     },
     tabs: {
         flexGrow: 0.9
+    },
+    panel: {
     }
 }));
 
 export default function FullWidthTabs({ fe, res, fes }) {
     const [orientation, setOrientation] = useState(1);
     const [disabled, setDisabled] = useState(false);
+    const [isWide, setIsWide] = useState(false);
 
-    const rotateHandler = () => {
+    const resizeHandler = () => {
         setOrientation(window.innerWidth < window.innerHeight || window.innerHeight > 500);
+        setIsWide(window.innerWidth > 1000);
     }
 
     useEffect(() => {
-        window.addEventListener('resize', rotateHandler);
-        if (!(window.innerWidth < window.innerHeight)) rotateHandler(window.innerWidth < window.innerHeight);
+        window.addEventListener('resize', resizeHandler);
+        resizeHandler();
     }, [])
 
     const classes = useStyles();
@@ -91,7 +105,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
     return (
         <div className={classes.root}>
             <AppBar position="static" color="default" className={classes.root2}>
-                <TemporaryDrawer fes={fes}></TemporaryDrawer>
+                <TemporaryDrawer fes={fes} isWide={isWide}></TemporaryDrawer>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -104,11 +118,42 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     <Tab label="지도" {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
+            <div className="view-container">
+            <div className="fest-list">
+                <Form></Form>
+                <Divider />
+                <p className="fest-list-p">찾는 축제 목록</p>
+                <List>
+                    {fes.map((fes) => (
+
+                        <ListItem button key={fes.id}>
+                            <Link href="/p/[id]" as={`/p/${JSON.stringify({
+                                id: fes.id,
+                                name: fes.name,
+                                x: fes.x,
+                                y: fes.y,
+                                cluster: fes.cluster,
+                                man: fes.man,
+                                exp: fes.explanation.replace(/(\\(n|t))/g, '')
+                            })}`}>
+                                <a className="fest-list-a">
+                                    <ListItemIcon>
+                                        <img src={`/img/${fes.id}.jpg`} className="fest-list-img"></img>
+                                    </ListItemIcon>
+                                    <ListItemText primary={fes.name} />
+                                    <span>{fes.period}</span>
+                                </a>
+                            </Link>
+                        </ListItem>
+
+                    ))}
+                </List>
+            </div>
             <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
                 onChangeIndex={handleChangeIndex}
-                // className={classes.panel}
+                className={classes.panel}
                 disabled={disabled}
             >
                 <TabPanel value={value} index={0} dir={theme.direction} >
@@ -152,6 +197,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 </div>
                 </TabPanel>
             </SwipeableViews>
+            </div>
             <style jsx global>{`
                 body {
                     padding: 0;
@@ -170,12 +216,12 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 .bar {
                     position: relative;
-                    width: 90vmin;
+                    width: 90%;
                     margin: 10px auto;
                 }
                 .pie {
                     position: relative;
-                    width: 90vmin;
+                    width: 90%;
                     margin: 10px auto;
                 }
                 .gridContainer {
@@ -184,15 +230,15 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     grid-auto-columns: 100%;
                 }
                 .ul {
-                    padding-inline-start: 5vw;
-                    padding-inline-end: 5vw;
+                    padding-inline-start: 0;
+                    padding-inline-end: 0;
                 }
                 .scroll {
                     overflow: scroll;
                 }
                 .info-img {
                     display: block;
-                    width: 90vmin;
+                    width: 90%;
                     border: solid;
                     margin: 10px auto;
                 }
@@ -203,7 +249,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .info-text {
                     margin: 10px auto;
                     font-size: 1.2rem;
-                    width: 90vmin;
+                    width: 90%;
                 }
 
                 .info-li {
@@ -229,6 +275,37 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 footer {
                     font-size: 0.5rem;
                     margin: 5vw;
+                }
+                @media (max-width: 1000px) {
+                    .fest-list {
+                        display: none;
+                    }
+                }
+                .fest-list {
+                    max-width: 300px;
+                }
+                .fest-list-img {
+                    width: 50vmin;
+                    max-width: 256px;
+                    height: 50vmin;
+                    max-height: 256px;
+                }
+                .fest-list-a {
+                    text-decoration: none;
+                    color: black;
+                    cursor: pointer;
+                    background-color: #f9f9f9;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    width: 50vmin;
+                    max-width: 256px;
+                    padding: 4px 4px;
+                }
+                .fest-list-p {
+                    margin: 4%;
+                }
+                .view-container {
+                    display: flex;
+                    justify-content: center;
                 }
             `}</style>
         </div>

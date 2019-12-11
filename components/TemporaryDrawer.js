@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function TemporaryDrawer({ fes }) {
+export default function TemporaryDrawer({ fes, isWide }) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         left: false
@@ -104,7 +104,7 @@ export default function TemporaryDrawer({ fes }) {
 
     return (
         <div className={classes.menu}>
-            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} />
+            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} visibility={isWide? 'hidden':'visible'}/>
 
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
                 {sideList('left')}
