@@ -3,7 +3,11 @@ import Head from 'next/head';
 import fes from '../../2019.json';
 import FullWidthTabs from '../../components/FullWidthTabs';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import https from "https";
 
+const agent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 const Info = ({ fe, res }) => {
 
@@ -40,7 +44,7 @@ const Info = ({ fe, res }) => {
 
 Info.getInitialProps = async function (context) {
   const fe = JSON.parse(context.query.id);
-  const res = await fetch(`https://35.170.234.69/restaurants?id=${fe.id}`);
+  const res = await fetch(`https://35.170.234.69/restaurants?id=${fe.id}`, {agent});
   const dataRes = await res.json();
 
   return {
