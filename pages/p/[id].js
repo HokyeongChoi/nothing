@@ -40,7 +40,7 @@ const Info = ({ fe, res }) => {
 
 Info.getInitialProps = async function (context) {
   const fe = JSON.parse(context.query.id);
-  const res = await fetch(`http://ec2-54-210-41-100.compute-1.amazonaws.com/restaurants?id=${fe.id}`);
+  const res = await fetch(`https://35.170.234.69/restaurants?id=${fe.id}`);
   const dataRes = await res.json();
 
   return {
