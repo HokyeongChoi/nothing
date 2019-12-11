@@ -17,7 +17,17 @@ const useStyles = makeStyles({
         maxWidth: "300px"
     },
     btn: {
-        zIndex: 2
+        zIndex: 2,
+    },
+    menu: {
+        // color: 'rgba(0, 0, 0, 0.87)',
+        // backgroundColor: '#f5f5f5',
+        flexGrow: 0.1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        cursor: 'pointer',
     }
 });
 
@@ -93,7 +103,7 @@ export default function TemporaryDrawer({ fes }) {
     );
 
     return (
-        <div>
+        <div className={classes.menu}>
             <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} />
 
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>

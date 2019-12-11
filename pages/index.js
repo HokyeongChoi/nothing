@@ -25,7 +25,10 @@ const Index = () => {
                     crossorigin=""></script>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
       </Head>
-      <TemporaryDrawer fes={fes}></TemporaryDrawer>
+      <div className="root2">
+        <TemporaryDrawer fes={fes}></TemporaryDrawer>
+        <div className="tabs"></div>
+      </div>
       <LeafMap fes={fes} full={true}></LeafMap>
       <style jsx global>{`
                 body {
@@ -36,7 +39,20 @@ const Index = () => {
                     height: 100vh;
                     width: 100vw;
                 }
-            `}</style>
+      `}</style>
+      <style jsx>{`
+                .root2 {
+                  display: flex;
+                  flex-direction: row;
+                  color: rgba(0, 0, 0, 0.87);
+                  background-color: #f5f5f5;
+                  position: static;
+                  min-height: 48px;
+                }
+                .tabs {
+                  flex-grow: 0.9;
+                }
+      `}</style>
     </>
   )
 };

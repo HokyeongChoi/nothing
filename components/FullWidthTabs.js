@@ -55,60 +55,12 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: 'primary',
         width: '100vw',
     },
-    // panel: {
-    //     position: 'fixed',
-    //     top: '25vmin',
-    //     left: '2.5vw',
-    //     overflow: 'hidden'
-    // },
-    // scrollContainer: {
-    //     position: 'relative',
-    //     marginTop: '1vmin',
-    //     marginLeft: '2.5vmin',
-    //     overflow: 'auto',
-    //     height: '40vh',
-    //     padding: '0',
-    // },
-    // scrollContainerMain: {
-    //     position: 'relative',
-    //     marginTop: '0vmin',
-    //     marginLeft: '0vmin',
-    //     overflow: 'visible',
-    //     height: '70vh',
-    //     padding: '0',
-    // },
-    scroll: {
-        overflow: 'scroll'
+    root2: {
+        flexDirection: 'row'
     },
-    ul: {
-        paddingInlineStart: '5vw',
-        paddingInlineEnd: '5vw'
-    },
-    gridContainer1: {
-        display: 'grid',
-        gridTemplateRows: 'minmax(256px, 1fr) 40vmax 40vmax',
-        gridAutoColumns: '100%',
-        // justifyItems: ''
-    },
-    gridContainer: {
-        display: 'grid',
-        gridTemplateRows: 'minmax(256px, 1fr) 40vmax',
-        gridAutoColumns: '100%',
-        // justifyItems: 'stretch'
-    },
-    main: {
-
-    },
-    bar: {
-        position: 'relative',
-        width: '90vmin',
-        margin: '10px auto'
-    },
-    pie: {
-        position: 'relative',
-        width: '90vmin',
-        margin: '10px auto'
-    },
+    tabs: {
+        flexGrow: 0.9
+    }
 }));
 
 export default function FullWidthTabs({ fe, res, fes }) {
@@ -138,7 +90,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default">
+            <AppBar position="static" color="default" className={classes.root2}>
                 <TemporaryDrawer fes={fes}></TemporaryDrawer>
                 <Tabs
                     value={value}
@@ -146,6 +98,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     indicatorColor="primary"
                     variant="fullWidth"
                     aria-label="full width tabs"
+                    className={classes.tabs}
                 >
                     <Tab label="축제정보" {...a11yProps(0)} />
                     <Tab label="지도" {...a11yProps(1)} />
@@ -159,27 +112,27 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 disabled={disabled}
             >
                 <TabPanel value={value} index={0} dir={theme.direction} >
-                    <div className={classes.gridContainer1}>
-                        <div className={classes.main}>
+                    <div className="gridContainer1">
+                        <div>
                             <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
-                            <p className="info-name">{fe.name}</p>
-                            <p className="info-name">{fe.exp}</p>
+                            <p className="info-text info-title">{fe.name}</p>
+                            <p className="info-text">{fe.exp}</p>
                         </div>
-                        <div className={classes.bar}>
+                        <div className="bar">
                             <BarChart data={clt[fe.cluster.toString()]} />
                         </div>
-                        <div className={classes.pie}>
+                        <div className="pie">
                             <Pie man={fe.man} />
                         </div>
                     </div>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                <div className={classes.gridContainer}>
+                <div className="gridContainer">
                     
                     <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
                     
-                    <div className={classes.scroll}>
-                        <ul className={classes.ul}>
+                    <div className="scroll">
+                        <ul className="ul">
                             {res.map(res =>
                                 (<a href={res.place_url} key={res.id}>
                                     <li className="info-li">
@@ -210,17 +163,47 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
             `}</style>
             <style jsx>{`
-                
+                .gridContainer1 {
+                    display: grid;
+                    grid-template-rows: minmax(256px, 1fr) 40vmax 40vmax;
+                    grid-auto-columns: 100%;
+                }
+                .bar {
+                    position: relative;
+                    width: 90vmin;
+                    margin: 10px auto;
+                }
+                .pie {
+                    position: relative;
+                    width: 90vmin;
+                    margin: 10px auto;
+                }
+                .gridContainer {
+                    display: grid;
+                    grid-template-rows: minmax(256px, 1fr) 50vmax;
+                    grid-auto-columns: 100%;
+                }
+                .ul {
+                    padding-inline-start: 5vw;
+                    padding-inline-end: 5vw;
+                }
+                .scroll {
+                    overflow: scroll;
+                }
                 .info-img {
                     display: block;
                     width: 90vmin;
                     border: solid;
                     margin: 10px auto;
                 }
-
-                .info-name {
-                    margin-left: 3vw;
-                    margin-bottom: 5vw;
+                .info-text.info-title {
+                    font-size: 1.5rem;
+                    font-weight: 500;
+                }
+                .info-text {
+                    margin: 10px auto;
+                    font-size: 1.2rem;
+                    width: 90vmin;
                 }
 
                 .info-li {

@@ -33,9 +33,11 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
     if (full) {
         style = <style jsx>{`
                             #map {
-                                height: 100vh;
+                                height: 96vh;
                                 width: 100vw;
                                 z-index: 1;
+                            }
+                            .mapContainer {
                             }
                             img {
                                 width: 10vw;
