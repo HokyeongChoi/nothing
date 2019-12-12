@@ -73,7 +73,8 @@ const useStyles = makeStyles(theme => ({
     },
     panel: {
         overflowY: 'auto',
-        height: '100vh'
+        height: '100vh',
+        maxWidth: '800px'
     }
 }));
 
@@ -328,6 +329,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .view-container {
                     display: ${isWide? 'grid':''};
                     justify-content: center;
+                    justify-items: center;
                     grid-template-columns: auto 1fr;
                 }
             `}</style>
