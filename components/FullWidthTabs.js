@@ -12,6 +12,17 @@ import TemporaryDrawer from './TemporaryDrawer';
 import BarChart from './BarChart';
 import clt from '../clt_labels.json';
 import Pie from './Pie';
+//
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Form from './Form';
+import Link from 'next/link';
+
+import queryString from 'query-string';
+// const querystring = require('querystring');
 
 const LeafMap = dynamic(
     () => import('./LeafMap'),
@@ -55,73 +66,35 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: 'primary',
         width: '100vw',
     },
-    // panel: {
-    //     position: 'fixed',
-    //     top: '25vmin',
-    //     left: '2.5vw',
-    //     overflow: 'hidden'
-    // },
-    // scrollContainer: {
-    //     position: 'relative',
-    //     marginTop: '1vmin',
-    //     marginLeft: '2.5vmin',
-    //     overflow: 'auto',
-    //     height: '40vh',
-    //     padding: '0',
-    // },
-    // scrollContainerMain: {
-    //     position: 'relative',
-    //     marginTop: '0vmin',
-    //     marginLeft: '0vmin',
-    //     overflow: 'visible',
-    //     height: '70vh',
-    //     padding: '0',
-    // },
-    scroll: {
-        overflow: 'scroll'
+    root2: {
+        flexDirection: 'row',
+        position: 'sticky',
+        top: 0
     },
-    ul: {
-        paddingInlineStart: '5vw',
-        paddingInlineEnd: '5vw'
+    tabs: {
+        flexGrow: 0.9
     },
-    gridContainer1: {
-        display: 'grid',
-        gridTemplateRows: 'minmax(256px, 1fr) 40vmax 40vmax',
-        gridAutoColumns: '100%',
-        // justifyItems: ''
-    },
-    gridContainer: {
-        display: 'grid',
-        gridTemplateRows: 'minmax(256px, 1fr) 40vmax',
-        gridAutoColumns: '100%',
-        // justifyItems: 'stretch'
-    },
-    main: {
-
-    },
-    bar: {
-        position: 'relative',
-        width: '90vmin',
-        margin: '10px auto'
-    },
-    pie: {
-        position: 'relative',
-        width: '90vmin',
-        margin: '10px auto'
-    },
+    panel: {
+        overflowY: 'auto',
+        height: '100vh',
+        maxWidth: '800px'
+    }
 }));
 
 export default function FullWidthTabs({ fe, res, fes }) {
     const [orientation, setOrientation] = useState(1);
     const [disabled, setDisabled] = useState(false);
+    const [isWide, setIsWide] = useState(false);
+    const [word, setWord] = React.useState('');
 
-    const rotateHandler = () => {
+    const resizeHandler = () => {
         setOrientation(window.innerWidth < window.innerHeight || window.innerHeight > 500);
+        setIsWide(window.innerWidth > 1000);
     }
 
     useEffect(() => {
-        window.addEventListener('resize', rotateHandler);
-        if (!(window.innerWidth < window.innerHeight)) rotateHandler(window.innerWidth < window.innerHeight);
+        window.addEventListener('resize', resizeHandler);
+        resizeHandler();
     }, [])
 
     const classes = useStyles();
@@ -138,67 +111,106 @@ export default function FullWidthTabs({ fe, res, fes }) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default">
-                <TemporaryDrawer fes={fes}></TemporaryDrawer>
+            <AppBar position="static" color="default" className={classes.root2}>
+                <TemporaryDrawer fes={fes} isWide={isWide}></TemporaryDrawer>
                 <Tabs
                     value={value}
                     onChange={handleChange}
                     indicatorColor="primary"
                     variant="fullWidth"
                     aria-label="full width tabs"
+                    className={classes.tabs}
                 >
                     <Tab label="축제정보" {...a11yProps(0)} />
                     <Tab label="지도" {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
-            <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={value}
-                onChangeIndex={handleChangeIndex}
-                // className={classes.panel}
-                disabled={disabled}
-            >
-                <TabPanel value={value} index={0} dir={theme.direction} >
-                    <div className={classes.gridContainer1}>
-                        <div className={classes.main}>
-                            <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
-                            <p className="info-name">{fe.name}</p>
-                            <p className="info-name">{fe.exp}</p>
-                        </div>
-                        <div className={classes.bar}>
-                            <BarChart data={clt[fe.cluster.toString()]} />
-                        </div>
-                        <div className={classes.pie}>
-                            <Pie man={fe.man} />
-                        </div>
-                    </div>
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                <div className={classes.gridContainer}>
-                    
-                    <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
-                    
-                    <div className={classes.scroll}>
-                        <ul className={classes.ul}>
-                            {res.map(res =>
-                                (<a href={res.place_url} key={res.id}>
-                                    <li className="info-li">
-                                        <Restaurant res={res}></Restaurant>
-                                    </li>
-                                </a>
-                                )
-                            )}
-                        </ul>
-                        <footer>
-                            <div>
-                                Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
-                            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                            </div>
-                        </footer>
-                    </div>
+            <div className="view-container">
+                <div className="fest-list">
+                    <Form searchHandler={setWord}></Form>
+                    <Divider />
+                    <p className="fest-list-p">찾는 축제 목록</p>
+                    <List>
+                        {fes.map((fes) => (
+                            (fes.name.indexOf(word) != -1)
+                            &&
+                            <ListItem button key={fes.id}>
+                                <Link href="/p/[id]" as={`/p/${
+                                    queryString.stringify({
+                                        id: fes.id,
+                                        name: fes.name,
+                                        x: fes.x,
+                                        y: fes.y,
+                                        cluster: fes.cluster,
+                                        man: fes.man,
+                                        exp: fes.explanation.replace(/(\\(n|t))/g, ''),
+                                        region: fes.region.replace(/(\\(n|t))/g, ''),
+                                        place: fes.place.replace(/(\\(n|t))/g, '')
+                                })}`}>
+                                    <a className="fest-list-a">
+                                        <ListItemIcon>
+                                            <img src={`/img/${fes.id}.jpg`} className="fest-list-img"></img>
+                                        </ListItemIcon>
+                                        <ListItemText primary={fes.name} />
+                                        <span>{fes.period}</span>
+                                    </a>
+                                </Link>
+                            </ListItem>
+
+                        ))}
+                    </List>
                 </div>
-                </TabPanel>
-            </SwipeableViews>
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
+                    className={classes.panel}
+                    disabled={disabled}
+                >
+                    <TabPanel value={value} index={0} dir={theme.direction} >
+                        <div className="gridContainer1">
+                            <div>
+                                <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
+                                <p className="info-text info-title">{fe.name}</p>
+                                <p className="info-text text1">개최지역: {fe.region}</p>
+                                <p className="info-text text2">축제장소: {fe.place}</p>
+                                <p className="info-text text3">{fe.exp}</p>
+                            </div>
+                            <div className="bar">
+                                <BarChart data={clt[fe.cluster.toString()]} />
+                            </div>
+                            <div className="pie">
+                                <Pie man={fe.man} />
+                            </div>
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={value} index={1} dir={theme.direction}>
+                    <div className="gridContainer">
+                        
+                        <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
+                        
+                        <div className="scroll">
+                            <ul className="ul">
+                                {res.map(res =>
+                                    (<a href={res.place_url} key={res.id}>
+                                        <li className="info-li">
+                                            <Restaurant res={res}></Restaurant>
+                                        </li>
+                                    </a>
+                                    )
+                                )}
+                            </ul>
+                            <footer>
+                                <div>
+                                    Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
+                                <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                    </TabPanel>
+                </SwipeableViews>
+            </div>
             <style jsx global>{`
                 body {
                     padding: 0;
@@ -210,19 +222,61 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
             `}</style>
             <style jsx>{`
-                
+                .gridContainer1 {
+                    display: grid;
+                    grid-template-rows: minmax(256px, 1fr) 40vmax 40vmax;
+                    grid-auto-columns: 100%;
+                }
+                .bar {
+                    position: relative;
+                    width: 90%;
+                    margin: 10px auto;
+                }
+                .pie {
+                    position: relative;
+                    width: 90%;
+                    margin: 10px auto;
+                }
+                .gridContainer {
+                    display: grid;
+                    grid-template-rows: minmax(256px, 1fr) 50vmax;
+                    grid-auto-columns: 100%;
+                }
+                .ul {
+                    padding-inline-start: 0;
+                    padding-inline-end: 0;
+                }
+                .scroll {
+                    overflow: auto;
+                }
                 .info-img {
                     display: block;
-                    width: 90vmin;
+                    width: 90%;
                     border: solid;
                     margin: 10px auto;
                 }
-
-                .info-name {
-                    margin-left: 3vw;
-                    margin-bottom: 5vw;
+                .info-text.info-title {
+                    font-size: 1.5rem;
+                    font-weight: 500;
                 }
-
+                .info-text {
+                    margin: 10px auto;
+                    font-size: 1.2rem;
+                    width: 90%;
+                    color: rgba(0,0,0,0.87);
+                    background-color: #f5f5f5;
+                    border: 1px solid rgba(0,0,0,0.87);
+                    border-radius: 2px;
+                    padding: 0 10px;
+                    box-shadow: 0px 2px 4x 0px rgba(0,0,0,0.2);
+                }
+                .info-text.text1 {
+                }
+                .info-text.text2 {
+                }
+                .info-text.text3 {
+                    
+                }
                 .info-li {
                     list-style-type: none;
                     font-family: sans-serif;
@@ -242,10 +296,46 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 ul {
                     display: ${orientation ? '' : 'none'};
+                    ${isWide? null:'width: 90%; margin: 10px auto;'}
                 }
                 footer {
                     font-size: 0.5rem;
                     margin: 5vw;
+                }
+                @media (max-width: 1000px) {
+                    .fest-list {
+                        display: none;
+                    }
+                }
+                .fest-list {
+                    max-width: 300px;
+                    overflow-y: auto;
+                    height: 100vh;
+                }
+                .fest-list-img {
+                    width: 50vmin;
+                    max-width: 256px;
+                    height: 50vmin;
+                    max-height: 256px;
+                }
+                .fest-list-a {
+                    text-decoration: none;
+                    color: black;
+                    cursor: pointer;
+                    background-color: #f9f9f9;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    width: 50vmin;
+                    max-width: 256px;
+                    padding: 4px 4px;
+                }
+                .fest-list-p {
+                    margin: 4%;
+                }
+                .view-container {
+                    display: ${isWide? 'grid':''};
+                    justify-content: center;
+                    justify-items: center;
+                    grid-template-columns: auto 1fr;
                 }
             `}</style>
         </div>

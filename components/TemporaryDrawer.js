@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
 import Link from 'next/link';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import queryString from 'query-string';
 
 const useStyles = makeStyles({
     list: {
@@ -17,15 +17,26 @@ const useStyles = makeStyles({
         maxWidth: "300px"
     },
     btn: {
-        zIndex: 2
+        zIndex: 2,
+    },
+    menu: {
+        // color: 'rgba(0, 0, 0, 0.87)',
+        // backgroundColor: '#f5f5f5',
+        flexGrow: 0.1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        cursor: 'pointer',
     }
 });
 
-export default function TemporaryDrawer({ fes }) {
+export default function TemporaryDrawer({ fes, isWide }) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         left: false
     });
+    const [word, setWord] = React.useState('');
 
     const toggleDrawer = (side, open) => event => {
         if (event.type === 'keydown' && event.key !== 'Escape') {
@@ -40,21 +51,25 @@ export default function TemporaryDrawer({ fes }) {
             className={classes.list}
             onKeyDown={toggleDrawer(side, false)}
         >
-            <Form></Form>
+            <Form searchHandler={setWord}></Form>
             <Divider />
             <p>찾는 축제 목록</p>
             <List>
                 {fes.map((fes) => (
-
+                    (fes.name.indexOf(word) != -1)
+                    &&
                     <ListItem button key={fes.id}>
-                        <Link href="/p/[id]" as={`/p/${JSON.stringify({
-                            id: fes.id,
-                            name: fes.name,
-                            x: fes.x,
-                            y: fes.y,
-                            cluster: fes.cluster,
-                            man: fes.man,
-                            exp: fes.explanation.replace(/(\\(n|t))/g, '')
+                        <Link href="/p/[id]" as={`/p/${
+                            queryString.stringify({
+                                id: fes.id,
+                                name: fes.name,
+                                x: fes.x,
+                                y: fes.y,
+                                cluster: fes.cluster,
+                                man: fes.man,
+                                exp: fes.explanation.replace(/(\\(n|t))/g, ''),
+                                region: fes.region.replace(/(\\(n|t))/g, ''),
+                                place: fes.place.replace(/(\\(n|t))/g, '')
                         })}`}>
                             <a>
                                 <ListItemIcon>
@@ -93,8 +108,8 @@ export default function TemporaryDrawer({ fes }) {
     );
 
     return (
-        <div>
-            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} />
+        <div className={classes.menu}>
+            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} visibility={isWide? 'hidden':'visible'}/>
 
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
                 {sideList('left')}
