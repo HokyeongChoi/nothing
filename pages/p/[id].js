@@ -43,7 +43,8 @@ const Info = ({ fe, res }) => {
 }
 
 Info.getInitialProps = async function (context) {
-  const fe = JSON.parse(context.query.id);
+  const fe = JSON.parse(decodeURI(context.query.id));
+  fe.exp = fe.exp.replace(/escapeSlash/g, "/");
   const res = await fetch(`https://a.seoulfestival.shop/restaurants?id=${fe.id}`);
   const dataRes = await res.json();
 

@@ -72,6 +72,8 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 0.9
     },
     panel: {
+        overflowY: 'auto',
+        height: '100vh'
     }
 }));
 
@@ -119,84 +121,85 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 </Tabs>
             </AppBar>
             <div className="view-container">
-            <div className="fest-list">
-                <Form></Form>
-                <Divider />
-                <p className="fest-list-p">찾는 축제 목록</p>
-                <List>
-                    {fes.map((fes) => (
+                <div className="fest-list">
+                    <Form></Form>
+                    <Divider />
+                    <p className="fest-list-p">찾는 축제 목록</p>
+                    <List>
+                        {fes.map((fes) => (
 
-                        <ListItem button key={fes.id}>
-                            <Link href="/p/[id]" as={`/p/${JSON.stringify({
-                                id: fes.id,
-                                name: fes.name,
-                                x: fes.x,
-                                y: fes.y,
-                                cluster: fes.cluster,
-                                man: fes.man,
-                                exp: fes.explanation.replace(/(\\(n|t))/g, '')
-                            })}`}>
-                                <a className="fest-list-a">
-                                    <ListItemIcon>
-                                        <img src={`/img/${fes.id}.jpg`} className="fest-list-img"></img>
-                                    </ListItemIcon>
-                                    <ListItemText primary={fes.name} />
-                                    <span>{fes.period}</span>
-                                </a>
-                            </Link>
-                        </ListItem>
+                            <ListItem button key={fes.id}>
+                                <Link href="/p/[id]" as={`/p/${encodeURI(
+                                    JSON.stringify({
+                                        id: fes.id,
+                                        name: fes.name,
+                                        x: fes.x,
+                                        y: fes.y,
+                                        cluster: fes.cluster,
+                                        man: fes.man,
+                                        exp: fes.explanation.replace(/(\\(n|t))/g, '').replace(/\/{1}/g, 'escapeSlash')
+                                }))}`}>
+                                    <a className="fest-list-a">
+                                        <ListItemIcon>
+                                            <img src={`/img/${fes.id}.jpg`} className="fest-list-img"></img>
+                                        </ListItemIcon>
+                                        <ListItemText primary={fes.name} />
+                                        <span>{fes.period}</span>
+                                    </a>
+                                </Link>
+                            </ListItem>
 
-                    ))}
-                </List>
-            </div>
-            <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={value}
-                onChangeIndex={handleChangeIndex}
-                className={classes.panel}
-                disabled={disabled}
-            >
-                <TabPanel value={value} index={0} dir={theme.direction} >
-                    <div className="gridContainer1">
-                        <div>
-                            <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
-                            <p className="info-text info-title">{fe.name}</p>
-                            <p className="info-text">{fe.exp}</p>
-                        </div>
-                        <div className="bar">
-                            <BarChart data={clt[fe.cluster.toString()]} />
-                        </div>
-                        <div className="pie">
-                            <Pie man={fe.man} />
-                        </div>
-                    </div>
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                <div className="gridContainer">
-                    
-                    <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
-                    
-                    <div className="scroll">
-                        <ul className="ul">
-                            {res.map(res =>
-                                (<a href={res.place_url} key={res.id}>
-                                    <li className="info-li">
-                                        <Restaurant res={res}></Restaurant>
-                                    </li>
-                                </a>
-                                )
-                            )}
-                        </ul>
-                        <footer>
-                            <div>
-                                Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
-                            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                            </div>
-                        </footer>
-                    </div>
+                        ))}
+                    </List>
                 </div>
-                </TabPanel>
-            </SwipeableViews>
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
+                    className={classes.panel}
+                    disabled={disabled}
+                >
+                    <TabPanel value={value} index={0} dir={theme.direction} >
+                        <div className="gridContainer1">
+                            <div>
+                                <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
+                                <p className="info-text info-title">{fe.name}</p>
+                                <p className="info-text">{fe.exp}</p>
+                            </div>
+                            <div className="bar">
+                                <BarChart data={clt[fe.cluster.toString()]} />
+                            </div>
+                            <div className="pie">
+                                <Pie man={fe.man} />
+                            </div>
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={value} index={1} dir={theme.direction}>
+                    <div className="gridContainer">
+                        
+                        <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
+                        
+                        <div className="scroll">
+                            <ul className="ul">
+                                {res.map(res =>
+                                    (<a href={res.place_url} key={res.id}>
+                                        <li className="info-li">
+                                            <Restaurant res={res}></Restaurant>
+                                        </li>
+                                    </a>
+                                    )
+                                )}
+                            </ul>
+                            <footer>
+                                <div>
+                                    Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
+                                <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                    </TabPanel>
+                </SwipeableViews>
             </div>
             <style jsx global>{`
                 body {
@@ -234,7 +237,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     padding-inline-end: 0;
                 }
                 .scroll {
-                    overflow: scroll;
+                    overflow: auto;
                 }
                 .info-img {
                     display: block;
@@ -271,6 +274,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 ul {
                     display: ${orientation ? '' : 'none'};
+                    ${isWide? null:'width: 90%; margin: 10px auto;'}
                 }
                 footer {
                     font-size: 0.5rem;
@@ -283,6 +287,8 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 .fest-list {
                     max-width: 300px;
+                    overflow-y: auto;
+                    height: 100vh;
                 }
                 .fest-list-img {
                     width: 50vmin;
@@ -304,8 +310,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     margin: 4%;
                 }
                 .view-container {
-                    display: flex;
+                    display: ${isWide? 'grid':''};
                     justify-content: center;
+                    grid-template-columns: auto 1fr;
                 }
             `}</style>
         </div>

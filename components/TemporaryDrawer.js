@@ -57,15 +57,16 @@ export default function TemporaryDrawer({ fes, isWide }) {
                 {fes.map((fes) => (
 
                     <ListItem button key={fes.id}>
-                        <Link href="/p/[id]" as={`/p/${JSON.stringify({
-                            id: fes.id,
-                            name: fes.name,
-                            x: fes.x,
-                            y: fes.y,
-                            cluster: fes.cluster,
-                            man: fes.man,
-                            exp: fes.explanation.replace(/(\\(n|t))/g, '')
-                        })}`}>
+                        <Link href="/p/[id]" as={`/p/${encodeURI(
+                            JSON.stringify({
+                                id: fes.id,
+                                name: fes.name,
+                                x: fes.x,
+                                y: fes.y,
+                                cluster: fes.cluster,
+                                man: fes.man,
+                                exp: fes.explanation.replace(/(\\(n|t))/g, '').replace(/\/{1}/g, 'escapeSlash')
+                        }))}`}>
                             <a>
                                 <ListItemIcon>
                                     <img src={`/img/${fes.id}.jpg`}></img>
