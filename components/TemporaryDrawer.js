@@ -65,7 +65,9 @@ export default function TemporaryDrawer({ fes, isWide }) {
                                 y: fes.y,
                                 cluster: fes.cluster,
                                 man: fes.man,
-                                exp: fes.explanation.replace(/(\\(n|t))/g, '').replace(/\/{1}/g, 'escapeSlash')
+                                exp: fes.explanation.replace(/(\\(n|t))/g, '').replace(/\/{1}/g, 'escapeSlash'),
+                                region: fes.개최지역,
+                                place: fes.축제장소
                         }))}`}>
                             <a>
                                 <ListItemIcon>

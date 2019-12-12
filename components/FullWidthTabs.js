@@ -137,7 +137,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
                                         y: fes.y,
                                         cluster: fes.cluster,
                                         man: fes.man,
-                                        exp: fes.explanation.replace(/(\\(n|t))/g, '').replace(/\/{1}/g, 'escapeSlash')
+                                        exp: fes.explanation.replace(/(\\(n|t))/g, '').replace(/\/{1}/g, 'escapeSlash'),
+                                        region: fes.개최지역,
+                                        place: fes.축제장소
                                 }))}`}>
                                     <a className="fest-list-a">
                                         <ListItemIcon>
@@ -164,7 +166,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
                             <div>
                                 <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
                                 <p className="info-text info-title">{fe.name}</p>
-                                <p className="info-text">{fe.exp}</p>
+                                <p className="info-text text1">개최지역: {fe.region}</p>
+                                <p className="info-text text2">축제장소: {fe.place}</p>
+                                <p className="info-text text3">{fe.exp}</p>
                             </div>
                             <div className="bar">
                                 <BarChart data={clt[fe.cluster.toString()]} />
@@ -253,8 +257,20 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     margin: 10px auto;
                     font-size: 1.2rem;
                     width: 90%;
+                    color: rgba(0,0,0,0.87);
+                    background-color: #f5f5f5;
+                    border: 1px solid rgba(0,0,0,0.87);
+                    border-radius: 2px;
+                    padding: 0 10px;
+                    box-shadow: 0px 2px 4x 0px rgba(0,0,0,0.2);
                 }
-
+                .info-text.text1 {
+                }
+                .info-text.text2 {
+                }
+                .info-text.text3 {
+                    
+                }
                 .info-li {
                     list-style-type: none;
                     font-family: sans-serif;
