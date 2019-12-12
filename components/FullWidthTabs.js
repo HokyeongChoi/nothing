@@ -21,7 +21,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
 import Link from 'next/link';
 
-const querystring = require('querystring');
+import queryString from 'query-string';
+// const querystring = require('querystring');
 
 const LeafMap = dynamic(
     () => import('./LeafMap'),
@@ -135,7 +136,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                             &&
                             <ListItem button key={fes.id}>
                                 <Link href="/p/[id]" as={`/p/${
-                                    querystring.stringify({
+                                    queryString.stringify({
                                         id: fes.id,
                                         name: fes.name,
                                         x: fes.x,

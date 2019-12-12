@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
 import Link from 'next/link';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import queryString from 'query-string';
 
 const useStyles = makeStyles({
     list: {
@@ -60,7 +60,7 @@ export default function TemporaryDrawer({ fes, isWide }) {
                     &&
                     <ListItem button key={fes.id}>
                         <Link href="/p/[id]" as={`/p/${
-                            JSON.stringify({
+                            queryString.stringify({
                                 id: fes.id,
                                 name: fes.name,
                                 x: fes.x,
