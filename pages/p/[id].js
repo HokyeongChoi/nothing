@@ -49,7 +49,10 @@ Info.getInitialProps = async function (context) {
   // fe.exp = fe.exp.replace(/escapeSlash/g, "/");
   // fe.region = fe.region.replace(/escapeSlash/g, "/");
   // fe.place = fe.place.replace(/escapeSlash/g, "/");
-  const res = await fetch(`https://a.seoulfestival.shop/restaurants?id=${fe.id}`);
+  let res = await fetch(`https://a.seoulfestival.shop/restaurants?id=${fe.id}`);
+  if (res.status != 200) {
+    res = await fetch(`https://dollhy.pythonanywhere.com/restaurants/${fe.id}`);
+  }
   const dataRes = await res.json();
 
   return {
