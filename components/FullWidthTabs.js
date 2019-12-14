@@ -67,7 +67,7 @@ const useStyles = makeStyles(() => ({
     panel: {
         overflowY: 'auto',
         height: '100vh',
-        maxWidth: '800px'
+        width: '100%'
     }
 }));
 
@@ -79,13 +79,17 @@ export default function FullWidthTabs({ fe, res, fes }) {
 
     const resizeHandler = () => {
         setOrientation(window.innerWidth < window.innerHeight || window.innerHeight > 500);
-        setIsWide(window.innerWidth > 1000);
+        setIsWide(window.innerWidth > 1024);
     }
 
     useEffect(() => {
         window.addEventListener('resize', resizeHandler);
         resizeHandler();
     }, [])
+
+    useEffect(()=>{
+        setOpen(null)
+    }, [fe])
 
     const classes = useStyles();
     const theme = useTheme();
@@ -128,8 +132,8 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 >
                     <TabPanel value={value} index={0} dir={theme.direction} >
                         <div className="gridContainer1">
-                            <div>
-                                <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
+                            <img className="info-img" src={`/img/${fe.id}.jpg`}></img>
+                            <div className="info">
                                 <p className="info-text info-title">{fe.name}</p>
                                 <p className="info-text text1">개최지역: {fe.region}</p>
                                 <p className="info-text text2">축제장소: {fe.place}</p>
@@ -144,26 +148,24 @@ export default function FullWidthTabs({ fe, res, fes }) {
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                    <div className="gridContainer">
-                        
-                        <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)} open={open} />
-                        
-                        <div className="scroll">
-                            <ul className="ul">
-                                {res.map(res =>
-                                    <li className="info-li" key={res.id} onClick={()=>setOpen(res.id)}>
-                                        <Restaurant res={res}></Restaurant>
-                                    </li>
-                                )}
-                            </ul>
-                            <footer>
-                                <div>
-                                    Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
-                                <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                                </div>
-                            </footer>
+                        <div className="gridContainer">
+                            <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)} open={open} />
+                            <div className="scroll">
+                                <ul className="ul">
+                                    {res.map(res =>
+                                        <li className="info-li" key={res.id} onClick={()=>setOpen(res.id)}>
+                                            <Restaurant res={res}></Restaurant>
+                                        </li>
+                                    )}
+                                </ul>
+                                <footer>
+                                    <div>
+                                        Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
+                                    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                                    </div>
+                                </footer>
+                            </div>
                         </div>
-                    </div>
                     </TabPanel>
                 </SwipeableViews>
             </div>
@@ -180,8 +182,11 @@ export default function FullWidthTabs({ fe, res, fes }) {
             <style jsx>{`
                 .gridContainer1 {
                     display: grid;
-                    grid-template-rows: minmax(256px, 1fr) 40vmax 40vmax;
-                    grid-auto-columns: 100%;
+                    grid-template-rows: ${isWide? 'auto minmax(256px,50vw)':'auto auto minmax(256px,100vmin) minmax(256px,100vmin)'};
+                    grid-template-columns: ${isWide? '1fr 1fr':'100%'};
+                }
+                .info {
+                    ${isWide? 'grid-row: 1/2; grid-column: 2/3':''}
                 }
                 .bar {
                     position: relative;
@@ -192,11 +197,13 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     position: relative;
                     width: 90%;
                     margin: 10px auto;
+                    ${isWide? 'grid-column: 2/3;':''}
                 }
                 .gridContainer {
                     display: grid;
                     grid-template-rows: minmax(256px, 1fr) 50vmax;
                     grid-auto-columns: 100%;
+                    ${isWide? null:'width: 90%; margin: 10px auto;'}
                 }
                 .ul {
                     padding-inline-start: 0;
@@ -206,6 +213,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     overflow: auto;
                 }
                 .info-img {
+                    ${isWide? 'grid-row: 1/2; grid-column: 1/2':''}
                     display: block;
                     width: 90%;
                     border: solid;
@@ -246,13 +254,13 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 ul {
                     display: ${orientation ? '' : 'none'};
-                    ${isWide? null:'width: 90%; margin: 10px auto;'}
+                    
                 }
                 footer {
                     font-size: 0.5rem;
                     margin: 5vw;
                 }
-                @media (max-width: 1000px) {
+                @media (max-width: 1024px) {
                     .fest-list {
                         display: none;
                     }
@@ -267,6 +275,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     justify-content: center;
                     justify-items: center;
                     grid-template-columns: auto 1fr;
+                    grid-gap: 10px;
                 }
             `}</style>
         </div>

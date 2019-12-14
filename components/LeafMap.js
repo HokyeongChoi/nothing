@@ -52,7 +52,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open }) => {
     } else {
         style = <style jsx>{`
                             #map {
-                                width: 90vw;
+                                width: 100%;
                                 height: 40vh;
                                 min-height: 256px;
                                 margin: auto;
