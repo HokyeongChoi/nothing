@@ -12,17 +12,7 @@ import TemporaryDrawer from './TemporaryDrawer';
 import BarChart from './BarChart';
 import clt from '../clt_labels.json';
 import Pie from './Pie';
-//
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Form from './Form';
-import Link from 'next/link';
-
-import queryString from 'query-string';
-// const querystring = require('querystring');
+import FestivalList from './FestivalList';
 
 const LeafMap = dynamic(
     () => import('./LeafMap'),
@@ -61,7 +51,7 @@ function a11yProps(index) {
     };
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     root: {
         backgroundColor: 'primary',
         width: '100vw',
@@ -85,7 +75,6 @@ export default function FullWidthTabs({ fe, res, fes }) {
     const [orientation, setOrientation] = useState(1);
     const [disabled, setDisabled] = useState(false);
     const [isWide, setIsWide] = useState(false);
-    const [word, setWord] = React.useState('');
 
     const resizeHandler = () => {
         setOrientation(window.innerWidth < window.innerHeight || window.innerHeight > 500);
@@ -127,38 +116,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
             </AppBar>
             <div className="view-container">
                 <div className="fest-list">
-                    <Form searchHandler={setWord}></Form>
-                    <Divider />
-                    <p className="fest-list-p">찾는 축제 목록</p>
-                    <List>
-                        {fes.map((fes) => (
-                            (fes.name.indexOf(word) != -1)
-                            &&
-                            <ListItem button key={fes.id}>
-                                <Link href="/p/[id]" as={`/p/${
-                                    queryString.stringify({
-                                        id: fes.id,
-                                        name: fes.name,
-                                        x: fes.x,
-                                        y: fes.y,
-                                        cluster: fes.cluster,
-                                        man: fes.man,
-                                        exp: fes.explanation.replace(/(\\(n|t))/g, ''),
-                                        region: fes.region.replace(/(\\(n|t))/g, ''),
-                                        place: fes.place.replace(/(\\(n|t))/g, '')
-                                })}`}>
-                                    <a className="fest-list-a">
-                                        <ListItemIcon>
-                                            <img src={`/img/${fes.id}.jpg`} className="fest-list-img"></img>
-                                        </ListItemIcon>
-                                        <ListItemText primary={fes.name} />
-                                        <span>{fes.period}</span>
-                                    </a>
-                                </Link>
-                            </ListItem>
-
-                        ))}
-                    </List>
+                    <FestivalList fes={fes}/>
                 </div>
                 <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -311,25 +269,6 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     max-width: 300px;
                     overflow-y: auto;
                     height: 100vh;
-                }
-                .fest-list-img {
-                    width: 50vmin;
-                    max-width: 256px;
-                    height: 50vmin;
-                    max-height: 256px;
-                }
-                .fest-list-a {
-                    text-decoration: none;
-                    color: black;
-                    cursor: pointer;
-                    background-color: #f9f9f9;
-                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                    width: 50vmin;
-                    max-width: 256px;
-                    padding: 4px 4px;
-                }
-                .fest-list-p {
-                    margin: 4%;
                 }
                 .view-container {
                     display: ${isWide? 'grid':''};
