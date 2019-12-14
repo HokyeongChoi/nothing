@@ -21,7 +21,9 @@ function isInside(marker, poly) {
     return inside;
 };
 
-const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
+let restaurantMarkers = {};
+
+const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open }) => {
     const [init, setInit] = useState(true);
 
     const Icon = L.icon({
@@ -110,7 +112,6 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
             map.addEventListener("click", zoomOutHandler);
         }
         
-
         layer.addEventListener("click", zoomInHandler);
         
         layer.setStyle({
@@ -138,12 +139,14 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
             // console.log("invalidate");
             if (!init) {
                 map.remove();
+                restaurantMarkers = {};
             }
             map = L.map('map').setView([fes.y, fes.x], 15);
             marker = L.marker([fes.y, fes.x]).bindPopup(fes.name)
                 .addTo(map).openPopup();
+            
             for (let r of res) {
-                L.marker(
+                restaurantMarkers[r.id] = L.marker(
                     [r.y, r.x],
                     { icon: Icon }
                 ).bindPopup(
@@ -165,7 +168,11 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe }) => {
         }
     }, [fes, invalidate])
 
-
+    useEffect(()=>{
+        if (open) {
+            restaurantMarkers[open].openPopup();
+        }
+    }, [open])
 
     return (
         <div className="mapContainer"

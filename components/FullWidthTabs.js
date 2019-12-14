@@ -75,6 +75,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
     const [orientation, setOrientation] = useState(1);
     const [disabled, setDisabled] = useState(false);
     const [isWide, setIsWide] = useState(false);
+    const [open, setOpen] = useState(null);
 
     const resizeHandler = () => {
         setOrientation(window.innerWidth < window.innerHeight || window.innerHeight > 500);
@@ -145,17 +146,14 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     <TabPanel value={value} index={1} dir={theme.direction}>
                     <div className="gridContainer">
                         
-                        <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)}></LeafMap>
+                        <LeafMap fes={fe} res={res} key={value === 1} invalidate={value === 1} preventSwipe={(b)=>setDisabled(b)} open={open} />
                         
                         <div className="scroll">
                             <ul className="ul">
                                 {res.map(res =>
-                                    (<a href={res.place_url} key={res.id}>
-                                        <li className="info-li">
-                                            <Restaurant res={res}></Restaurant>
-                                        </li>
-                                    </a>
-                                    )
+                                    <li className="info-li" key={res.id} onClick={()=>setOpen(res.id)}>
+                                        <Restaurant res={res}></Restaurant>
+                                    </li>
                                 )}
                             </ul>
                             <footer>
@@ -245,12 +243,6 @@ export default function FullWidthTabs({ fe, res, fes }) {
 
                 .info-li:hover {
                     background-color: rgba(245, 132, 84, 0.5);
-                }
-
-                ul a {
-                    text-decoration: none;
-                    -webkit-text-decoration: none;
-                    color: black;
                 }
                 ul {
                     display: ${orientation ? '' : 'none'};
