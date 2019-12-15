@@ -23,7 +23,7 @@ function isInside(marker, poly) {
 
 let restaurantMarkers = {};
 
-const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height }) => {
+const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
     const [init, setInit] = useState(true);
 
     const Icon = L.icon({
@@ -32,6 +32,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height }) => 
     });
 
     let style;
+    
     if (full) {
         style = <style jsx>{`
                             #map {
@@ -121,21 +122,26 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height }) => 
         });
     }
 
+    useEffect(()=>{
+        if (!full) return;
+        if (map) {
+            map.remove();
+        }
+        map = L.map('map').fitBounds([
+            [37.413294, 126.734086], 
+            [37.715133, 127.269311]
+        ]);
+        L.geoJSON(mun, {
+            onEachFeature: municipalHandler
+        }).addTo(map);
+        
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    }, [height]);
+
     useEffect(() => {
-        if (full) {
-            map = L.map('map').fitBounds([
-                [37.413294, 126.734086], 
-                [37.715133, 127.269311]
-            ]);
-            L.geoJSON(mun, {
-                onEachFeature: municipalHandler
-            }).addTo(map);
-            // markerLayer = L.layerGroup();
-            
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        } else if (invalidate) {
+        if (invalidate) {
             // console.log("invalidate");
             if (!init) {
                 map.remove();

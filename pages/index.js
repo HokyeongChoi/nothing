@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import fes from '../2019.json';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
@@ -12,13 +13,28 @@ const LeafMap = dynamic(
 )
 
 const Index = () => {
-  const [height, setHeight] = React.useState(null)
+  const [height, setHeight] = useState(null)
+
   if (process.browser) {
-      React.useEffect(() => setHeight(document.children[0].clientHeight), [
+      useEffect(() => {
+        setHeight(document.children[0].clientHeight);
+      }, [
           document.children[0].clientHeight
       ])
   }
   
+  const resizeHandler = () => {
+      setHeight(document.children[0].clientHeight);
+  }
+
+  useEffect(() => {
+      window.addEventListener('resize', resizeHandler);
+      resizeHandler();
+      return function cleanup() {
+        window.removeEventListener('resize', resizeHandler);
+      };
+  }, [])
+
   return (
     <>
       <Head>
