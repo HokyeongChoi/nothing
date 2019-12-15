@@ -12,6 +12,13 @@ const LeafMap = dynamic(
 )
 
 const Index = () => {
+  const [height, setHeight] = React.useState(null)
+  if (process.browser) {
+      React.useEffect(() => setHeight(document.children[0].clientHeight), [
+          document.children[0].clientHeight
+      ])
+  }
+  
   return (
     <>
       <Head>
@@ -29,7 +36,7 @@ const Index = () => {
         <TemporaryDrawer fes={fes}></TemporaryDrawer>
         <div className="tabs"></div>
       </div>
-      <LeafMap fes={fes} full={true}></LeafMap>
+      <LeafMap fes={fes} full={true} height={height}></LeafMap>
       <style jsx global>{`
                 body {
                     padding: 0;

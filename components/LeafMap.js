@@ -23,7 +23,7 @@ function isInside(marker, poly) {
 
 let restaurantMarkers = {};
 
-const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open }) => {
+const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height }) => {
     const [init, setInit] = useState(true);
 
     const Icon = L.icon({
@@ -35,7 +35,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open }) => {
     if (full) {
         style = <style jsx>{`
                             #map {
-                                height: 96vh;
+                                height: ${height - 48}px;
                                 width: 100vw;
                                 z-index: 1;
                             }
@@ -53,7 +53,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open }) => {
         style = <style jsx>{`
                             #map {
                                 width: 100%;
-                                height: 40vh;
+                                height: 100%;
                                 min-height: 256px;
                                 margin: auto;
                             }

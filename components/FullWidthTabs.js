@@ -51,34 +51,25 @@ function a11yProps(index) {
     };
 }
 
-const useStyles = makeStyles(() => ({
-    root: {
-        backgroundColor: 'primary',
-        width: '100vw',
-    },
-    root2: {
-        flexDirection: 'row',
-        position: 'sticky',
-        top: 0
-    },
-    tabs: {
-        flexGrow: 0.9
-    },
-    panel: {
-        overflowY: 'auto',
-        height: '100vh',
-        width: '100%'
-    }
-}));
-
 export default function FullWidthTabs({ fe, res, fes }) {
     const [orientation, setOrientation] = useState(1);
     const [disabled, setDisabled] = useState(false);
     const [isWide, setIsWide] = useState(false);
     const [open, setOpen] = useState(null);
 
+    const [height, setHeight] = useState(null)
+    const [width, setWidth] = useState(null)
+    if (process.browser) {
+        useEffect(() => setHeight(document.children[0].clientHeight), [
+            document.children[0].clientHeight
+        ])
+        useEffect(() => setWidth(document.children[0].clientWidth), [
+            document.children[0].clientWidth
+        ])
+    }
+
     const resizeHandler = () => {
-        setOrientation(window.innerWidth < window.innerHeight || window.innerHeight > 500);
+        setOrientation(window.innerWidth < window.innerHeight);
         setIsWide(window.innerWidth > 1024);
     }
 
@@ -90,6 +81,26 @@ export default function FullWidthTabs({ fe, res, fes }) {
     useEffect(()=>{
         setOpen(null)
     }, [fe])
+
+    const useStyles = makeStyles(() => ({
+        root: {
+            backgroundColor: 'primary',
+            width: '100vw',
+        },
+        root2: {
+            flexDirection: 'row',
+            position: 'sticky',
+            top: 0
+        },
+        tabs: {
+            flexGrow: 0.9
+        },
+        panel: {
+            overflowY: 'auto',
+            height: height-58,
+            width: '100%'
+        }
+    }));
 
     const classes = useStyles();
     const theme = useTheme();
@@ -182,11 +193,11 @@ export default function FullWidthTabs({ fe, res, fes }) {
             <style jsx>{`
                 .gridContainer1 {
                     display: grid;
-                    grid-template-rows: ${isWide? 'auto minmax(256px,50vw)':'auto auto minmax(256px,100vmin) minmax(256px,100vmin)'};
-                    grid-template-columns: ${isWide? '1fr 1fr':'100%'};
+                    grid-template-rows: ${isWide || !orientation? 'auto minmax(256px,'+ Math.min((width-300*isWide)/2, height-58) +'px)':'auto auto minmax(256px,100vmin) minmax(256px,100vmin)'};
+                    grid-template-columns: ${isWide || !orientation? '1fr 1fr':'100%'};
                 }
                 .info {
-                    ${isWide? 'grid-row: 1/2; grid-column: 2/3':''}
+                    ${isWide || !orientation? 'grid-row: 1/2; grid-column: 2/3':''}
                 }
                 .bar {
                     position: relative;
@@ -197,13 +208,14 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     position: relative;
                     width: 90%;
                     margin: 10px auto;
-                    ${isWide? 'grid-column: 2/3;':''}
+                    ${isWide || !orientation? 'grid-column: 2/3;':''}
                 }
                 .gridContainer {
                     display: grid;
-                    grid-template-rows: minmax(256px, 1fr) 50vmax;
                     grid-auto-columns: 100%;
-                    ${isWide? null:'width: 90%; margin: 10px auto;'}
+                    width: 90%; margin: 10px auto;
+                    ${orientation || height > 500 ? 'grid-template-rows: 1fr 1fr;':'grid-template-rows: minmax(256px, 1fr);'}
+                    height: ${height - 78}px;
                 }
                 .ul {
                     padding-inline-start: 0;
@@ -211,9 +223,10 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 .scroll {
                     overflow: auto;
+                    height: 50vh;
                 }
                 .info-img {
-                    ${isWide? 'grid-row: 1/2; grid-column: 1/2':''}
+                    ${isWide || !orientation? 'grid-row: 1/2; grid-column: 1/2':''}
                     display: block;
                     width: 90%;
                     border: solid;
@@ -239,7 +252,6 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .info-text.text2 {
                 }
                 .info-text.text3 {
-                    
                 }
                 .info-li {
                     list-style-type: none;
@@ -248,27 +260,21 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     margin: auto 0;
                     border-bottom: 1px solid #fbe4d4;
                 }
-
                 .info-li:hover {
                     background-color: rgba(245, 132, 84, 0.5);
                 }
                 ul {
-                    display: ${orientation ? '' : 'none'};
-                    
+                    display: ${orientation || height > 500 ? 'block' : 'none'};
                 }
                 footer {
-                    font-size: 0.5rem;
-                    margin: 5vw;
-                }
-                @media (max-width: 1024px) {
-                    .fest-list {
-                        display: none;
-                    }
+                    font-size: 0.8rem;
+                    margin: 1vw;
                 }
                 .fest-list {
                     max-width: 300px;
                     overflow-y: auto;
-                    height: 100vh;
+                    height: ${height-58}px;
+                    ${isWide? '':'display: none;'}
                 }
                 .view-container {
                     display: ${isWide? 'grid':''};
