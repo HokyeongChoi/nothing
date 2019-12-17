@@ -46,6 +46,7 @@ const FestivalList = ({fes}) => {
             <style jsx>{`
                 .fest-list-img {
                     width: 50vmin;
+                    min-width: 200px;
                     max-width: 256px;
                     height: 50vmin;
                     max-height: 256px;
@@ -57,6 +58,7 @@ const FestivalList = ({fes}) => {
                     background-color: #f9f9f9;
                     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
                     width: 50vmin;
+                    min-width: 200px;
                     max-width: 256px;
                     padding: 4px 4px;
                 }

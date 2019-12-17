@@ -7,7 +7,8 @@ import FestivalList from './FestivalList';
 const useStyles = makeStyles({
     list: {
         width: "67vmin",
-        maxWidth: "300px"
+        maxWidth: "300px",
+        minWidth: "256px"
     },
     btn: {
         zIndex: 2,
