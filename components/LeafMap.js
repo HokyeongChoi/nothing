@@ -138,7 +138,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-    }, [height]);
+    });
 
     useEffect(() => {
         if (invalidate) {

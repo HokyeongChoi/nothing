@@ -17,14 +17,14 @@ const Index = () => {
 
   if (process.browser) {
       useEffect(() => {
-        setHeight(document.children[0].clientHeight);
+        setHeight(window.innerHeight);
       }, [
-          document.children[0].clientHeight
+          window.innerHeight
       ])
   }
   
   const resizeHandler = () => {
-      setHeight(document.children[0].clientHeight);
+      setHeight(window.innerHeight);
   }
 
   useEffect(() => {

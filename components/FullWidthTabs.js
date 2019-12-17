@@ -60,11 +60,11 @@ export default function FullWidthTabs({ fe, res, fes }) {
     const [height, setHeight] = useState(null)
     const [width, setWidth] = useState(null)
     if (process.browser) {
-        useEffect(() => setHeight(document.children[0].clientHeight), [
-            document.children[0].clientHeight
+        useEffect(() => setHeight(window.innerHeight), [
+            window.innerHeight
         ])
-        useEffect(() => setWidth(document.children[0].clientWidth), [
-            document.children[0].clientWidth
+        useEffect(() => setWidth(window.innerWidth), [
+            window.innerWidth
         ])
     }
 
@@ -76,6 +76,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
     useEffect(() => {
         window.addEventListener('resize', resizeHandler);
         resizeHandler();
+        return function cleanup() {
+            window.removeEventListener('resize', resizeHandler);
+        };
     }, [])
 
     useEffect(()=>{
