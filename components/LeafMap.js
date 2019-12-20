@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import L from 'leaflet';
 import mun from '../seoul_municipalities_geo_simple.json';
+import queryString from 'query-string';
 
 let map, markerLayer, marker, layer;
 
@@ -74,12 +75,50 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
         const colorCode = colorScheme[[22,15].includes(feature.properties.ESRI_PK)? 1 : feature.properties.ESRI_PK % colorScheme.length];
         // console.log(layer.getBounds())
         const festLayer = L.layerGroup();
+
+        // const getLink = (fes) => {
+        //     return (
+        //         <Link href="/p/[id]" as={`/p/${
+        //             queryString.stringify({
+        //                 id: fes.id,
+        //                 name: fes.name,
+        //                 x: fes.x,
+        //                 y: fes.y,
+        //                 cluster: fes.cluster,
+        //                 man: fes.man,
+        //                 exp: fes.explanation.replace(/(\\(n|t))/g, ''),
+        //                 region: fes.region.replace(/(\\(n|t))/g, ''),
+        //                 place: fes.place.replace(/(\\(n|t))/g, '')
+        //             })}`}>
+        //             <a>
+        //             {fes.name}<br></br><img src={`img/${fes.id}.jpg`}></img>
+        //             </a>
+        //         </Link>
+        //     )
+        // }
+
         for (let f of fes) {
             if (isInside(f, feature.geometry.coordinates)) {
                 L.marker(
                     [f.y, f.x],
                 ).bindPopup(
-                    `${f.name}<br><img src='img/${f.id}.jpg'></img>`
+                    `${f.name}<br></br>
+                    <a href="${
+                        `/p/${
+                            queryString.stringify({
+                                id: f.id,
+                                name: f.name,
+                                x: f.x,
+                                y: f.y,
+                                cluster: f.cluster,
+                                man: f.man,
+                                exp: f.explanation.replace(/(\\(n|t))/g, ''),
+                                region: f.region.replace(/(\\(n|t))/g, ''),
+                                place: f.place.replace(/(\\(n|t))/g, '')
+                            })}`
+                    }">
+                    <img src="img/${f.id}.jpg"}></img>
+                    </a>`
                 ).addTo(festLayer);
             }
         }
