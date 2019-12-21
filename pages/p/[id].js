@@ -41,8 +41,10 @@ const Info = ({ fe, res }) => {
 
 Info.getInitialProps = async function (context) {
   const fe = queryString.parse(context.query.id);
-  let res = await fetch(`https://a.seoulfestival.shop/restaurants?id=${fe.id}`);
-  if (res.status != 200) {
+  let res;
+  try {
+    res = await fetch(`https://a.seoulfestival.shop/restaurants?id=${fe.id}`);
+  } catch (error) {
     res = await fetch(`https://dollhy.pythonanywhere.com/restaurants/${fe.id}`);
   }
   const dataRes = await res.json();
