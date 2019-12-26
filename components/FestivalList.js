@@ -6,7 +6,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
 import Link from 'next/link';
-import queryString from 'query-string';
+import queryStringify from '../lib/queryStringify';
 import 'lazysizes';
 import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 
@@ -63,18 +63,8 @@ const FestivalList = ({fes}) => {
                         {getSorted(fes, prev).map((fes) => (
                             <ListItem button key={fes.id}>
                                 <Link href="/p/[id]" as={`/p/${
-                                    queryString.stringify({
-                                        id: fes.id,
-                                        name: fes.name,
-                                        x: fes.x,
-                                        y: fes.y,
-                                        cluster: fes.cluster,
-                                        man: fes.man,
-                                        exp: fes.explanation.replace(/(\\(n|t))/g, ''),
-                                        region: fes.region.replace(/(\\(n|t))/g, ''),
-                                        place: fes.place.replace(/(\\(n|t))/g, ''),
-                                        link: /(^http)|(^www)/.test(fes.link)? fes.link: null
-                                    })}`}>
+                                    queryStringify(fes)
+                                    }`}>
                                     <a className="fest-list-a">
                                         <ListItemIcon>
                                             <img data-src={`/img/${fes.id}.jpg`} className="fest-list-img lazyload"></img>
