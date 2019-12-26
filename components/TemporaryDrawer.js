@@ -4,28 +4,29 @@ import Drawer from '@material-ui/core/Drawer';
 import MenuIcon from '@material-ui/icons/Menu';
 import FestivalList from './FestivalList';
 
-const useStyles = makeStyles({
-    list: {
-        width: "67vmin",
-        maxWidth: "300px",
-        minWidth: "256px"
-    },
-    btn: {
-        zIndex: 2,
-    },
-    menu: {
-        // color: 'rgba(0, 0, 0, 0.87)',
-        // backgroundColor: '#f5f5f5',
-        flexGrow: 0.1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        cursor: 'pointer',
-    }
-});
-
-export default function TemporaryDrawer({ fes, isWide }) {
+export default function TemporaryDrawer({ fes, isWide, height }) {
+    const useStyles = makeStyles({
+        list: {
+            width: "67vmin",
+            maxWidth: "300px",
+            minWidth: "256px",
+            height: height
+        },
+        btn: {
+            zIndex: 2,
+        },
+        menu: {
+            // color: 'rgba(0, 0, 0, 0.87)',
+            // backgroundColor: '#f5f5f5',
+            flexGrow: 0.1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            cursor: 'pointer',
+        }
+    });
+    
     const classes = useStyles();
     const [state, setState] = React.useState({
         left: false

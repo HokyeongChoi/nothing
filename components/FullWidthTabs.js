@@ -151,6 +151,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                                 <p className="info-text info-title">{fe.name}</p>
                                 <p className="info-text text1">개최지역: {fe.region}</p>
                                 <p className="info-text text2">축제장소: {fe.place}</p>
+                                <p className="info-text text2">누리집: <a href={fe.link}>{fe.link}</a></p>
                                 <p className="info-text text3">{fe.exp}</p>
                             </div>
                             <div className="bar">
@@ -240,15 +241,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     font-weight: 500;
                 }
                 .info-text {
+                    display: block;
+                    width: 86%;
                     margin: 10px auto;
-                    font-size: 1.2rem;
-                    width: 90%;
-                    color: rgba(0,0,0,0.87);
-                    background-color: #f5f5f5;
-                    border: 1px solid rgba(0,0,0,0.87);
-                    border-radius: 2px;
-                    padding: 0 10px;
-                    box-shadow: 0px 2px 4x 0px rgba(0,0,0,0.2);
                 }
                 .info-text.text1 {
                 }

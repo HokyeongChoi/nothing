@@ -52,35 +52,42 @@ const FestivalList = ({fes}) => {
 
     return (
         <>
-            <Form searchHandler={setWord} prevHandler={setPrev} />
-            <Divider />
-            <p className="fest-list-p">찾는 축제 목록</p>
-            <List>
-                {getSorted(fes, prev).map((fes) => (
-                    <ListItem button key={fes.id}>
-                        <Link href="/p/[id]" as={`/p/${
-                            queryString.stringify({
-                                id: fes.id,
-                                name: fes.name,
-                                x: fes.x,
-                                y: fes.y,
-                                cluster: fes.cluster,
-                                man: fes.man,
-                                exp: fes.explanation.replace(/(\\(n|t))/g, ''),
-                                region: fes.region.replace(/(\\(n|t))/g, ''),
-                                place: fes.place.replace(/(\\(n|t))/g, '')
-                            })}`}>
-                            <a className="fest-list-a">
-                                <ListItemIcon>
-                                    <img data-src={`/img/${fes.id}.jpg`} className="fest-list-img lazyload"></img>
-                                </ListItemIcon>
-                                <ListItemText primary={fes.name} />
-                                <span>{fes.period}</span>
-                            </a>
-                        </Link>
-                    </ListItem>
-                ))}
-            </List>
+            <div className="fest-list-in">
+                <div className="fest-list-in2">
+                    <Form searchHandler={setWord} prevHandler={setPrev} />
+                    <Divider />
+                    <p className="fest-list-p">찾는 축제 목록</p>
+                </div>
+                <div className="fest-list-in3">
+                    <List>
+                        {getSorted(fes, prev).map((fes) => (
+                            <ListItem button key={fes.id}>
+                                <Link href="/p/[id]" as={`/p/${
+                                    queryString.stringify({
+                                        id: fes.id,
+                                        name: fes.name,
+                                        x: fes.x,
+                                        y: fes.y,
+                                        cluster: fes.cluster,
+                                        man: fes.man,
+                                        exp: fes.explanation.replace(/(\\(n|t))/g, ''),
+                                        region: fes.region.replace(/(\\(n|t))/g, ''),
+                                        place: fes.place.replace(/(\\(n|t))/g, ''),
+                                        link: /(^http)|(^www)/.test(fes.link)? fes.link: null
+                                    })}`}>
+                                    <a className="fest-list-a">
+                                        <ListItemIcon>
+                                            <img data-src={`/img/${fes.id}.jpg`} className="fest-list-img lazyload"></img>
+                                        </ListItemIcon>
+                                        <ListItemText primary={fes.name} />
+                                        <span>{fes.period}</span>
+                                    </a>
+                                </Link>
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            </div>
             <style jsx>{`
                 .fest-list-img {
                     width: 50vmin;
@@ -102,6 +109,17 @@ const FestivalList = ({fes}) => {
                 }
                 .fest-list-p {
                     margin: 4%;
+                }
+                .fest-list-in {
+                    display: grid;
+                    height: inherit;
+                }
+                .fest-list-in2 {
+                    position: sticky;
+                    top: 0;
+                }
+                .fest-list-in3 {
+                    overflow: auto;
                 }
             `}</style>
         </>
