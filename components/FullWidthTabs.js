@@ -120,7 +120,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
     return (
         <div className={classes.root}>
             <AppBar position="static" color="default" className={classes.root2}>
-                <TemporaryDrawer fes={fes} isWide={isWide}></TemporaryDrawer>
+                <TemporaryDrawer fes={fes} isWide={isWide} height={height}></TemporaryDrawer>
                 <Tabs
                     value={value}
                     onChange={handleChange}

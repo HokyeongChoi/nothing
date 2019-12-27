@@ -7,10 +7,7 @@ import FestivalList from './FestivalList';
 export default function TemporaryDrawer({ fes, isWide, height }) {
     const useStyles = makeStyles({
         list: {
-            width: "67vmin",
-            maxWidth: "300px",
-            minWidth: "256px",
-            height: height
+            height: 'inherit'
         },
         btn: {
             zIndex: 2,
@@ -55,8 +52,20 @@ export default function TemporaryDrawer({ fes, isWide, height }) {
             <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} visibility={isWide? 'hidden':'visible'}/>
 
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
-                {sideList('left')}
+                <div className="fest-list">
+                    {sideList('left')}
+                </div>
             </Drawer>
+            <style jsx>
+                {`
+                    .fest-list {
+                        width: 67vmin;
+                        max-width: 300px;
+                        min-width: 256px;
+                        height: ${height - 48}px;
+                    }
+                `}
+            </style>
         </div>
     );
 }
