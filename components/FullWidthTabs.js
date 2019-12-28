@@ -151,7 +151,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                                 <p className="info-text info-title">{fe.name}</p>
                                 <p className="info-text text1">개최지역: {fe.region}</p>
                                 <p className="info-text text2">축제장소: {fe.place}</p>
-                                <p className="info-text text2">누리집: <a href={fe.link}>{fe.link}</a></p>
+                                <p className="info-text link">누리집: <a href={fe.link}>{fe.link}</a></p>
                                 <p className="info-text text3">{fe.exp}</p>
                             </div>
                             <div className="bar">
@@ -230,7 +230,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     height: 50vh;
                 }
                 .info-img {
-                    ${isWide || !orientation? 'grid-row: 1/2; grid-column: 1/2':''}
+                    ${isWide || !orientation? 'grid-row: 1/2; grid-column: 1/2;':''}
                     display: block;
                     width: 90%;
                     border: solid;
@@ -250,6 +250,10 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .info-text.text2 {
                 }
                 .info-text.text3 {
+                }
+                .info-text.link {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
                 .info-li {
                     list-style-type: none;
