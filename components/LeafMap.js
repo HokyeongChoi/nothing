@@ -44,8 +44,8 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
                             .mapContainer {
                             }
                             img {
-                                width: 10vw;
-                                height: 10vw;
+                                width: 40vmin;
+                                max-width: 300px;
                             }
                             .leaflet-control-zoom{
                                 display: none;
