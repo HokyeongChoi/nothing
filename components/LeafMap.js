@@ -87,7 +87,10 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
                             queryStringify(f)
                         }`
                     }">
-                    <img src="img/${f.id}.jpg"}></img>
+                    <picture>
+                        <source type="image/webp" srcset="/img/${ f.id }.webp" />
+                        <img src="/img/${ f.id }.jpg" />
+                    </picture>
                     </a>`
                 ).addTo(festLayer);
             }
