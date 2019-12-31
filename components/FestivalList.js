@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -35,6 +35,7 @@ const isCurrent = fes => (
 const FestivalList = ({fes}) => {
     const [word, setWord] = useState('');
     const [prev, setPrev] = useState(false);
+    const [revalidate, setRevalidate] = useState(false);
 
     const getSorted = (fes, prev) => {
         const filtered = fes.filter(f=>(
@@ -50,6 +51,13 @@ const FestivalList = ({fes}) => {
         return filtered;
     }
 
+    if (process.browser) {
+        useEffect(() => {
+            setRevalidate(true);
+            // console.log("invalidate");
+        }, [])
+      }
+
     return (
         <>
             <div className="fest-list-in">
@@ -58,7 +66,7 @@ const FestivalList = ({fes}) => {
                     <Divider />
                     <p className="fest-list-p">찾는 축제 목록</p>
                 </div>
-                <div className="fest-list-in3">
+                <div className="fest-list-in3" key={revalidate}>
                     <List>
                         {getSorted(fes, prev).map((fes) => (
                             <ListItem button key={fes.id}>
