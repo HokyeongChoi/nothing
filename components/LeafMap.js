@@ -14,8 +14,8 @@ const getLink = (festival) => {
                 }`}>
                 <a>
                     <picture>
-                        <source type="image/webp" srcSet={`/img/${festival.id}.webp`} />
-                        <img src={`/img/${festival.id}.jpg`} />
+                        <source type="image/webp" srcSet={require(`../public/img/${festival.id}.jpg?webp`)} />
+                        <img src={require(`../public/img/${festival.id}.jpg`)} />
                     </picture>
                 </a>
             </Link>

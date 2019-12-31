@@ -68,8 +68,8 @@ const FestivalList = ({fes}) => {
                                     <a className="fest-list-a">
                                         <ListItemIcon>
                                             <picture>
-                                                <source type="image/webp" data-srcset={`/img/${fes.id}.webp`} />
-                                                <img data-src={`/img/${fes.id}.jpg`} className="fest-list-img lazyload" />
+                                                <source type="image/webp" data-srcset={require(`../public/img/${fes.id}.jpg?webp`)} />
+                                                <img data-src={require(`../public/img/${fes.id}.jpg`)} className="fest-list-img lazyload" />
                                             </picture>
                                         </ListItemIcon>
                                         <ListItemText primary={fes.name} />
