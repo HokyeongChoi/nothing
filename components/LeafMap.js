@@ -2,6 +2,26 @@ import React, { useState, useEffect } from 'react';
 import L from 'leaflet';
 import mun from '../seoul_municipalities_geo_simple.json';
 import queryStringify from '../lib/queryStringify.js';
+import ReactDOMServer from "react-dom/server";
+import Link from "next/link";
+
+const getLink = (festival) => {
+    return (
+        <>
+            {festival.name} < br />
+            <Link href="/p/[id]" as={`/p/${
+                queryStringify(festival)
+                }`}>
+                <a>
+                    <picture>
+                        <source type="image/webp" srcSet={`/img/${festival.id}.webp`} />
+                        <img src={`/img/${festival.id}.jpg`} />
+                    </picture>
+                </a>
+            </Link>
+        </>
+    )
+}
 
 let map, markerLayer, marker, layer;
 
@@ -81,17 +101,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
                 L.marker(
                     [f.y, f.x],
                 ).bindPopup(
-                    `${f.name}<br></br>
-                    <a href="${
-                        `/p/${
-                            queryStringify(f)
-                        }`
-                    }">
-                    <picture>
-                        <source type="image/webp" srcset="/img/${ f.id }.webp" />
-                        <img src="/img/${ f.id }.jpg" />
-                    </picture>
-                    </a>`
+                    ReactDOMServer.renderToString(getLink(f))
                 ).addTo(festLayer);
             }
         }
