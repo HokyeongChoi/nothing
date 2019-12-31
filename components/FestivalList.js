@@ -66,7 +66,7 @@ const FestivalList = ({fes}) => {
                     <Divider />
                     <p className="fest-list-p">찾는 축제 목록</p>
                 </div>
-                <div className="fest-list-in3" key={revalidate}>
+                <div className="fest-list-in3">
                     <List>
                         {getSorted(fes, prev).map((fes) => (
                             <ListItem button key={fes.id}>
@@ -75,7 +75,7 @@ const FestivalList = ({fes}) => {
                                     }`}>
                                     <a className="fest-list-a">
                                         <ListItemIcon>
-                                            <picture>
+                                            <picture key={revalidate}>
                                                 <source type="image/webp" data-srcset={require(`../public/img/${fes.id}.jpg?webp`)} />
                                                 <img data-src={require(`../public/img/${fes.id}.jpg`)} className="fest-list-img lazyload" />
                                             </picture>
