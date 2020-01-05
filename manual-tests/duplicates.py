@@ -17,14 +17,10 @@ def get_max_date(dates: list) -> (int, int):
     ]
     Example:
     dates: [{'year': 2019, 'month': 12, 'day': 21}, {'year': 2019, 'month': 12, 'day': 29}]"""
-    y = -1
-    m = -1
-    for d in dates:
-        if d["year"] > y:
-            y = d["year"]
-        if d["month"] > m:
-            m = d["month"]
-    return (y, m)
+    res = sorted(dates, key=lambda d: d["year"] * 13 + d["month"])
+    if len(res) == 0:
+        return (-1, -1)
+    return (res[-1]["year"], res[-1]["month"])
 
 with open("2019.json", encoding="utf-8") as f:
     lst_of_dicts = json.load(f)
