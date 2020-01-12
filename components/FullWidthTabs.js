@@ -280,7 +280,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     margin: 1vw;
                 }
                 .fest-list {
-                    max-width: 300px;
+                    max-width: 320px;
                     overflow-y: auto;
                     height: ${height-58}px;
                     ${isWide? '':'display: none;'}
