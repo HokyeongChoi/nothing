@@ -157,7 +157,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
             onEachFeature: municipalHandler
         }).addTo(map);
         
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
     });
@@ -188,7 +188,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
             //     id: 'mapbox.streets',
             //     accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
             // }).addTo(map);
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
