@@ -23,7 +23,7 @@ const getLink = (festival) => {
     )
 }
 
-let map, markerLayer, marker, layer;
+let map, markerLayer, marker, layer, osmb;
 
 function isInside(marker, poly) {
     // console.log(poly[0])
@@ -169,7 +169,7 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
                 map.remove();
                 restaurantMarkers = {};
             }
-            map = L.map('map').setView([fes.y, fes.x], 15);
+            map = L.map('map').setView([fes.y, fes.x], 16);
             marker = L.marker([fes.y, fes.x]).bindPopup(fes.name)
                 .addTo(map).openPopup();
             
@@ -193,6 +193,8 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
             }).addTo(map);
 
             layer = L.layerGroup().addTo(map);
+
+            osmb = new OSMBuildings(map).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
         }
     }, [fes, invalidate])
 
