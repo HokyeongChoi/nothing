@@ -234,7 +234,6 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 .scroll {
                     overflow: auto;
-                    height: 50vh;
                 }
                 .info-img {
                     ${isWide || !orientation? 'grid-row: 1/2; grid-column: 1/2;':''}
