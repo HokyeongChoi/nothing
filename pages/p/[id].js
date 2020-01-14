@@ -41,7 +41,11 @@ const Info = ({ fe, res }) => {
 }
 
 Info.getInitialProps = async function (context) {
-  const fe = queryString.parse(context.query.id);
+  const decodeInPlace = obj => {
+    Object.keys(obj).map(key => obj[key] = decodeURIComponent(obj[key]));
+  };
+  let fe = queryString.parse(context.query.id);
+  decodeInPlace(fe);
   let res;
   try {
     try {
