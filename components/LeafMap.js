@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import L from 'leaflet';
 import mun from '../seoul_municipalities_geo_simple.json';
-import queryStringify from '../lib/queryStringify.js';
+import getTime from '../lib/getTime';
 import ReactDOMServer from "react-dom/server";
 import Link from "next/link";
 
@@ -9,9 +9,7 @@ const getLink = (festival) => {
     return (
         <>
             {festival.name} < br />
-            <Link href="/p/[id]" as={`/p/${
-                queryStringify(festival)
-                }`}>
+            <Link href="/p/[id]" as={`/p/${festival.id}&${getTime(festival.date)}`}>
                 <a>
                     <picture>
                         <source type="image/webp" srcSet={require(`../public/img/${festival.id}.jpg?webp`)} />

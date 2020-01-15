@@ -159,7 +159,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                                 &&
                                 <p className="info-text link">누리집: <a href={fe.link}>{fe.link}</a></p>
                                 }
-                                <p className="info-text text3">{fe.exp}</p>
+                                <p className="info-text text3">{fe.explanation.replace(/(\\(n|t))/g, '')}</p>
                             </div>
                             <div className="bar">
                                 <BarChart data={clt[fe.cluster.toString()]} />

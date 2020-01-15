@@ -6,7 +6,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Form from './Form';
 import Link from 'next/link';
-import queryStringify from '../lib/queryStringify';
+import getTime from '../lib/getTime';
 import 'lazysizes';
 import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 
@@ -57,9 +57,7 @@ const FestivalList = ({fes}) => {
                     <List>
                         {getSorted(fes, prev).map((fes) => (
                             <ListItem button key={fes.id}>
-                                <Link href="/p/[id]" as={`/p/${
-                                    queryStringify(fes)
-                                    }`}>
+                                <Link href="/p/[id]" as={`/p/${fes.id}&${getTime(fes.date)}`}>
                                     <a className="fest-list-a">
                                         <ListItemIcon>
                                             <picture key={revalidate}>
