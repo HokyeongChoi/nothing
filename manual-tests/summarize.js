@@ -1,5 +1,7 @@
 const { readFileSync, writeFileSync, readdirSync} = require('fs');
 
+const path = process.argv[2] || 'a';
+
 const sum = {
     "responseEnd": 0,
     "domInteractive": 0,
@@ -7,8 +9,8 @@ const sum = {
     "loadEventEnd": 0
 };
 let cnt = 0;
-for (let f of readdirSync(__dirname + '/logs/bb')) {
-    const data = readFileSync(__dirname + '/logs/bb/' + f);
+for (let f of readdirSync(__dirname + `/logs/${path}${path}`)) {
+    const data = readFileSync(__dirname + `/logs/${path}${path}/` + f);
     const j = JSON.parse(data);
     for (let key of Object.keys(j)) {
         sum[key] += j[key];
@@ -22,4 +24,4 @@ for (let key of Object.keys(sum)) {
 
 const report = JSON.stringify(sum, null, 2);
 
-writeFileSync(__dirname + '/logs/b/b.json', report);
+writeFileSync(__dirname + `/logs/${path}/${path}.json`, report);

@@ -21,7 +21,7 @@ const getLink = (festival) => {
     )
 }
 
-let map, markerLayer, marker, layer, osmb;
+let map, markerLayer, marker, layer;
 
 function isInside(marker, poly) {
     // console.log(poly[0])
@@ -180,19 +180,12 @@ const LeafMap = ({ fes, res, full, invalidate, preventSwipe, open, height}) => {
                 ).addTo(map);
             }
             setInit(false);
-            // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            //     maxZoom: 18,
-            //     id: 'mapbox.streets',
-            //     accessToken: 'pk.eyJ1IjoiZG9sbGh5IiwiYSI6ImNrMnNraHRraDBpeGUzbXRqcm9hMTIxNnMifQ.s5z_Pkw604EFu087friCtQ'
-            // }).addTo(map);
+            
             L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
             layer = L.layerGroup().addTo(map);
-
-            osmb = new OSMBuildings(map).load('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
         }
     }, [fes, invalidate])
 
