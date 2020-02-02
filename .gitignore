@@ -47,3 +47,8 @@ SimpleList.js
 backup/
 SEOUL_FESTIVAL.db
 memo.txt
+
+env
+*.DS_Store
+*.pyc
+__pycache__

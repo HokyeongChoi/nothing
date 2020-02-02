@@ -5,6 +5,8 @@ const festivals = require('../2019.json');
 
 setDefaultOptions({ timeout: 3000 });
 
+const path = process.argv[2] || 'aa';
+
 const getTime = (date) => {
     if (date.length === 0) {
         return 0;
@@ -44,7 +46,7 @@ const test = async (qid, qtime, idx) => {
         'loadEventEnd'
     );
     const metrics = JSON.stringify(timing, null, 2);
-    writeFileSync(__dirname + `/logs/aa/${idx}.json`, metrics);
+    writeFileSync(__dirname + `/logs/${path}/${idx}.json`, metrics);
 
     await context.close();
 }
