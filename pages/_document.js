@@ -1,15 +1,34 @@
-import React from 'react'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-import { ServerStyleSheets } from '@material-ui/styles'
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
+import React from "react";
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import { ServerStyleSheets } from "@material-ui/styles";
+import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
-const theme = responsiveFontSizes(createMuiTheme())
+import { GA_TRACKING_ID } from "../lib/gtag";
+
+const theme = responsiveFontSizes(createMuiTheme());
 
 class MyDocument extends Document {
   render() {
     return (
       <Html>
         <Head>
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `
+            }}
+          />
           <meta charSet="utf-8" />
           <meta
             name="viewport"
@@ -21,36 +40,37 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"
           />
           <style jsx global>{`
-                body {
-                    padding: 0;
-                    margin: 0;
-                }
-                html, body {
-                    height: 100vh;
-                    width: 100vw;
-                }
-            `}</style>
+            body {
+              padding: 0;
+              margin: 0;
+            }
+            html,
+            body {
+              height: 100vh;
+              width: 100vw;
+            }
+          `}</style>
         </Head>
         <body>
           <Main />
           <NextScript />
         </body>
       </Html>
-    )
+    );
   }
 }
 
 MyDocument.getInitialProps = async ctx => {
   // Render app and page and get the context of the page with collected side effects.
-  const sheets = new ServerStyleSheets()
-  const originalRenderPage = ctx.renderPage
+  const sheets = new ServerStyleSheets();
+  const originalRenderPage = ctx.renderPage;
 
   ctx.renderPage = () =>
     originalRenderPage({
       enhanceApp: App => props => sheets.collect(<App {...props} />)
-    })
+    });
 
-  const initialProps = await Document.getInitialProps(ctx)
+  const initialProps = await Document.getInitialProps(ctx);
 
   return {
     ...initialProps,
@@ -61,7 +81,7 @@ MyDocument.getInitialProps = async ctx => {
         {sheets.getStyleElement()}
       </React.Fragment>
     ]
-  }
-}
+  };
+};
 
-export default MyDocument
+export default MyDocument;
