@@ -189,7 +189,7 @@ const LeafMap = ({
       onEachFeature: municipalHandler
     }).addTo(map);
 
-    L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: `&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, 
         Geojson from: <a href="https://github.com/southkorea/seoul-maps">https://github.com/southkorea/seoul-maps</a>`
     }).addTo(map);
@@ -217,7 +217,7 @@ const LeafMap = ({
       }
       setInit(false);
 
-      L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);

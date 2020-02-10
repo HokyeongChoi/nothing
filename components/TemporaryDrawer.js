@@ -4,7 +4,8 @@ import Drawer from '@material-ui/core/Drawer';
 import MenuIcon from '@material-ui/icons/Menu';
 import FestivalList from './FestivalList';
 
-export default function TemporaryDrawer({ fes, isWide, height }) {
+// export default function TemporaryDrawer({ fes, isWide, height }) {
+export default function TemporaryDrawer({ fes, height }) {
     const useStyles = makeStyles({
         list: {
             height: 'inherit'
@@ -49,7 +50,8 @@ export default function TemporaryDrawer({ fes, isWide, height }) {
 
     return (
         <div className={classes.menu}>
-            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} visibility={isWide? 'hidden':'visible'}/>
+            {/* <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} visibility={isWide? 'hidden':'visible'}/> */}
+            <MenuIcon onClick={toggleDrawer('left', true)} className={classes.btn} />
 
             <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
                 <div className="fest-list">
