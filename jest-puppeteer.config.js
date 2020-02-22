@@ -1,6 +1,6 @@
 module.exports = {
     launch: {
-      dumpio: true,
+      dumpio: false,
       headless: process.env.HEADLESS !== 'false',
     },
     browser: 'chromium',

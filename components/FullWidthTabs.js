@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
 import Typography from "@material-ui/core/Typography";
-import Restaurant from "./Restaurant";
 import dynamic from "next/dynamic";
-import TemporaryDrawer from "./TemporaryDrawer";
-import BarChart from "./BarChart";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import SwipeableViews from "react-swipeable-views";
 import clt from "../clt_labels.json";
-import Pie from "./Pie";
+import BarChart from "./BarChart";
 import FestivalList from "./FestivalList";
+import Pie from "./Pie";
+import Restaurant from "./Restaurant";
+import TemporaryDrawer from "./TemporaryDrawer";
+import FestivalImage from "./FestivalImage";
 
 const LeafMap = dynamic(() => import("./LeafMap"), {
   ssr: false
@@ -48,6 +49,8 @@ function a11yProps(index) {
   };
 }
 
+const drawerWidth = 320;
+
 export default function FullWidthTabs({ fe, res, fes }) {
   const [orientation, setOrientation] = useState(1);
   const [disabled, setDisabled] = useState(false);
@@ -64,6 +67,8 @@ export default function FullWidthTabs({ fe, res, fes }) {
   const resizeHandler = () => {
     setOrientation(window.innerWidth < window.innerHeight);
     setIsWide(window.innerWidth > 1024);
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
   };
 
   useEffect(() => {
@@ -78,9 +83,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
     setOpen(null);
   }, [fe]);
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles(theme => ({
     root: {
-      backgroundColor: "primary",
+      backgroundColor: theme.palette.background.paper,
       width: "100vw"
     },
     root2: {
@@ -95,6 +100,20 @@ export default function FullWidthTabs({ fe, res, fes }) {
       overflowY: "auto",
       height: height - 58,
       width: "100%"
+    },
+    infoImgWide: {
+      gridRow: "1/2",
+      gridColumn: "1/2",
+      display: "block",
+      width: "90%",
+      border: "solid",
+      margin: "10px auto"
+    },
+    infoImg: {
+      display: "block",
+      width: "90%",
+      border: "solid",
+      margin: "10px auto"
     }
   }));
 
@@ -124,6 +143,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
+          textColor="primary"
           variant="fullWidth"
           aria-label="full width tabs"
           className={classes.tabs}
@@ -147,16 +167,10 @@ export default function FullWidthTabs({ fe, res, fes }) {
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="gridContainer1">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcSet={require(`../public/img/${fe.id}.jpg?webp`)}
-                />
-                <img
-                  src={require(`../public/img/${fe.id}.jpg`)}
-                  className="info-img"
-                />
-              </picture>
+              <FestivalImage
+                className={isWide ? classes.infoImgWide : classes.infoImg}
+                id={fe.id}
+              />
               <div className="info">
                 <p className="info-text info-title">{fe.name}</p>
                 <p className="info-text text1">개최지역: {fe.region}</p>
@@ -235,22 +249,16 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .gridContainer1 {
                     display: grid;
                     grid-template-rows: ${
-                      isWide || !orientation
+                      isWide
                         ? "auto minmax(256px," +
                           Math.min((width - 300 * isWide) / 2, height - 58) +
                           "px)"
                         : "auto auto minmax(256px,100vmin) minmax(256px,100vmin)"
                     };
-                    grid-template-columns: ${
-                      isWide || !orientation ? "1fr 1fr" : "100%"
-                    };
+                    grid-template-columns: ${isWide ? "1fr 1fr" : "100%"};
                 }
                 .info {
-                    ${
-                      isWide || !orientation
-                        ? "grid-row: 1/2; grid-column: 2/3"
-                        : ""
-                    }
+                    ${isWide ? "grid-row: 1/2; grid-column: 2/3" : ""}
                 }
                 .bar {
                     position: relative;
@@ -261,7 +269,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     position: relative;
                     width: 90%;
                     margin: 10px auto;
-                    ${isWide || !orientation ? "grid-column: 2/3;" : ""}
+                    ${isWide ? "grid-column: 2/3;" : ""}
                 }
                 .gridContainer {
                     display: grid;
@@ -281,24 +289,17 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .scroll {
                     overflow: auto;
                 }
-                .info-img {
-                    ${
-                      isWide || !orientation
-                        ? "grid-row: 1/2; grid-column: 1/2;"
-                        : ""
-                    }
-                    display: block;
-                    width: 90%;
-                    border: solid;
-                    margin: 10px auto;
-                }
                 .info-text.info-title {
                     font-size: 1.5rem;
                     font-weight: 500;
                 }
                 .info-text {
                     display: block;
-                    width: 86%;
+                    width: ${
+                      isWide && width
+                        ? ((width - drawerWidth) / 2) * 0.86 + "px;"
+                        : "86%;"
+                    }
                     margin: 10px auto;
                 }
                 .info-text.text1 {
@@ -310,6 +311,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .info-text.link {
                     text-overflow: ellipsis;
                     overflow: hidden;
+                    white-space: nowrap;
                 }
                 .info-li {
                     list-style-type: none;
@@ -329,7 +331,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     margin: 1vw;
                 }
                 .fest-list {
-                    max-width: 320px;
+                    width: ${drawerWidth}px;
                     overflow-y: auto;
                     height: ${height - 58}px;
                     // ${isWide ? "" : "display: none;"}
