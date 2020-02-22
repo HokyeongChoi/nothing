@@ -16,7 +16,8 @@ fixture = fixture.map(festival => ({
 
 (async () => {
     const browser = await puppeteer.launch({headless: false});
-    const page = await browser.newPage();
+    const context = await browser.createIncognitoBrowserContext();
+    const page = await context.newPage();
     await page.goto('https://seoul-festival-git-dev.abcdefg.now.sh');
     // await page.goto('http://localhost:3000');
         
@@ -88,5 +89,6 @@ fixture = fixture.map(festival => ({
         });
         await page.waitForFunction("document.querySelectorAll('.fest-list-a > div > span').length > 50");
     }
+    await browser.close();
 }
 )();

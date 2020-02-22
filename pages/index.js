@@ -1,8 +1,7 @@
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import fes from "../2019.json";
-import dynamic from "next/dynamic";
 import TemporaryDrawer from "../components/TemporaryDrawer.js";
-import Helmet from "../components/Helmet.js";
 
 const LeafMap = dynamic(() => import("../components/LeafMap"), {
   ssr: false
@@ -31,7 +30,6 @@ const Index = () => {
 
   return (
     <>
-      <Helmet />
       <div className="root2">
         <TemporaryDrawer fes={fes} height={height}></TemporaryDrawer>
         <div className="tabs"></div>

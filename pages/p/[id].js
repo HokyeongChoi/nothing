@@ -1,31 +1,16 @@
 import fetch from "isomorphic-unfetch";
+import ErrorPage from "next/error";
 import fes from "../../2019.json";
 import FullWidthTabs from "../../components/FullWidthTabs";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import getTime from "../../lib/getTime";
-import ErrorPage from "next/error";
-import Helmet from "../../components/Helmet.js";
 
 const Info = ({ fe, res, err }) => {
   if (err) {
     return <ErrorPage statusCode={err} />;
   }
-
-  const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: "#8ebdd8",
-        contrastText: "white"
-      }
-    }
-  });
-
   return (
     <>
-      <Helmet />
-      <ThemeProvider theme={theme}>
-        <FullWidthTabs fe={fe} res={res} fes={fes}></FullWidthTabs>
-      </ThemeProvider>
+      <FullWidthTabs fe={fe} res={res} fes={fes} />
     </>
   );
 };
