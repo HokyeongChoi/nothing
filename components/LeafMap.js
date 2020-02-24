@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
 import L from "leaflet";
-import mun from "../seoul_municipalities_geo_simple.json";
-import getTime from "../lib/getTime";
-import ReactDOMServer from "react-dom/server";
 import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
+import ReactDOMServer from "react-dom/server";
+import getTime from "../lib/getTime";
+import mun from "../seoul_municipalities_geo_simple.json";
+import RangeSlider from "./RangeSlider";
 
 const getLink = festival => {
   return (
@@ -58,6 +60,9 @@ const LeafMap = ({
   height
 }) => {
   const [init, setInit] = useState(true);
+  const [periodOn, setPeriodOn] = useState(false);
+  const periodOnRef = useRef(false);
+  periodOnRef.current = periodOn;
 
   const Icon = L.icon({
     iconUrl: "/icon.png",
@@ -144,8 +149,13 @@ const LeafMap = ({
         [37.413294, 126.734086],
         [37.715133, 127.269311]
       ]);
+      if (!periodOnRef.current) {
+        layer.setStyle({
+          fillOpacity: 0.5
+        });
+        map.removeLayer(festLayer);
+      }
       map.removeLayer(layer);
-      map.removeLayer(festLayer);
       for (let l of layers) {
         map.addLayer(l[0]);
       }
@@ -160,8 +170,14 @@ const LeafMap = ({
         map.removeLayer(l[0]);
         map.removeLayer(l[1]);
       }
+
       map.addLayer(layer);
-      map.addLayer(festLayer);
+      if (!periodOnRef.current) {
+        layer.setStyle({
+          fillOpacity: 0.1
+        });
+        map.addLayer(festLayer);
+      }
 
       layer.removeEventListener("click", zoomInHandler);
       map.addEventListener("click", zoomOutHandler);
@@ -174,6 +190,78 @@ const LeafMap = ({
       fillColor: colorCode,
       fillOpacity: 0.5
     });
+  };
+
+  const addControlTo = map => {
+    L.Control.Filter = L.Control.extend({
+      onAdd: function(map) {
+        const elt = L.DomUtil.create("div");
+
+        const handleFilter = value => {
+          map.removeLayer(this._layer);
+          this._layer = L.layerGroup();
+          const [start, end] = value;
+          for (let festival of fes) {
+            let t = 0;
+            const date = festival.date;
+            if (date.length !== 0) {
+              const { year, month } = date[date.length - 1];
+              t = (year - 2019) * 12 + (month - 1);
+            }
+            if (start <= t && t <= end) {
+              L.marker([festival.y, festival.x])
+                .bindPopup(ReactDOMServer.renderToString(getLink(festival)))
+                .addTo(this._layer);
+            }
+          }
+          map.addLayer(this._layer);
+        };
+
+        const inputs = (
+          <>
+            <RangeSlider
+              map={map}
+              maxDate={(() => {
+                let last = [];
+                for (let i = fes.length - 1; last.length === 0; i--) {
+                  last = fes[i].date;
+                }
+                return last[last.length - 1];
+              })()}
+              handleFilter={handleFilter}
+              handleOn={() => {
+                setPeriodOn(true);
+                layers.forEach(([layer, _]) => {
+                  layer.setStyle({ fillOpacity: 0.1 });
+                });
+              }}
+              handleOff={() => {
+                map.removeLayer(this._layer);
+                this._layer = L.layerGroup();
+                setPeriodOn(false);
+                layers.forEach(([layer, _]) => {
+                  layer.setStyle({ fillOpacity: 0.5 });
+                });
+              }}
+            />
+          </>
+        );
+
+        ReactDOM.hydrate(inputs, elt);
+
+        return elt;
+      },
+
+      onRemove: function(map) {},
+
+      _layer: L.layerGroup()
+    });
+
+    L.control.filter = function(opts) {
+      return new L.Control.Filter(opts);
+    };
+
+    L.control.filter({ position: "bottomleft" }).addTo(map);
   };
 
   useEffect(() => {
@@ -193,7 +281,9 @@ const LeafMap = ({
       attribution: `&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, 
         Geojson from: <a href="https://github.com/southkorea/seoul-maps">https://github.com/southkorea/seoul-maps</a>`
     }).addTo(map);
-  });
+
+    addControlTo(map);
+  }, [height]);
 
   useEffect(() => {
     if (invalidate) {
@@ -224,7 +314,7 @@ const LeafMap = ({
 
       layer = L.layerGroup().addTo(map);
     }
-  }, [fes, invalidate]);
+  }, [fes, invalidate, res]);
 
   useEffect(() => {
     if (open) {

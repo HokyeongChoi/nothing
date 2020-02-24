@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
 import Typography from "@material-ui/core/Typography";
-import Restaurant from "./Restaurant";
 import dynamic from "next/dynamic";
-import TemporaryDrawer from "./TemporaryDrawer";
-import BarChart from "./BarChart";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import SwipeableViews from "react-swipeable-views";
 import clt from "../clt_labels.json";
-import Pie from "./Pie";
+import BarChart from "./BarChart";
 import FestivalList from "./FestivalList";
+import Pie from "./Pie";
+import Restaurant from "./Restaurant";
+import TemporaryDrawer from "./TemporaryDrawer";
 
 const LeafMap = dynamic(() => import("./LeafMap"), {
   ssr: false
@@ -78,9 +78,9 @@ export default function FullWidthTabs({ fe, res, fes }) {
     setOpen(null);
   }, [fe]);
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles(theme => ({
     root: {
-      backgroundColor: "primary",
+      backgroundColor: theme.palette.background.paper,
       width: "100vw"
     },
     root2: {
@@ -124,6 +124,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
+          textColor="primary"
           variant="fullWidth"
           aria-label="full width tabs"
           className={classes.tabs}
