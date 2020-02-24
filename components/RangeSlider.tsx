@@ -10,6 +10,7 @@ import RangeSwitch from "./RangeSwitch";
 
 type Props = {
   map: L.Map;
+  maxDate: { year: number; month: number; day: number };
   handleFilter: (value: number | number[]) => void;
   handleOff: () => void;
   handleOn: () => void;
@@ -35,7 +36,7 @@ const getSemantics = (value: number): string => {
   return `${year}.${month}`;
 };
 
-const max = getNumber(new Date());
+const now = getNumber(new Date());
 
 const ValueLabelComponent = (props: {
   children: any;
@@ -53,12 +54,14 @@ const ValueLabelComponent = (props: {
 
 const RangeSlider: React.FC<Props> = ({
   map,
+  maxDate,
   handleFilter,
   handleOff,
   handleOn
 }) => {
+  const max = Math.max((maxDate.year - 2019) * 12 + maxDate.month - 1, now);
   const classes = useStyles({});
-  const [value, setValue] = useState([max, max]);
+  const [value, setValue] = useState([now, max]);
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -118,22 +121,20 @@ const RangeSlider: React.FC<Props> = ({
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={koLocale}>
           <DatePicker
             views={["year", "month"]}
-            helperText="부터"
             minDate={new Date("2019-01-01")}
             maxDate={getSemantics(value[1])}
             value={getSemantics(value[0])}
             onChange={handleDateChangeL}
-            format="yyyy년 MM월"
+            format="yyyy년 MM월 부터"
             disabled={disabled}
           />
           <DatePicker
             views={["year", "month"]}
-            helperText="까지"
             minDate={getSemantics(value[0])}
-            maxDate={new Date()}
+            maxDate={getSemantics(max)}
             value={getSemantics(value[1])}
             onChange={handleDateChangeH}
-            format="yyyy년 MM월"
+            format="yyyy년 MM월 까지"
             disabled={disabled}
           />
         </MuiPickersUtilsProvider>

@@ -221,6 +221,13 @@ const LeafMap = ({
           <>
             <RangeSlider
               map={map}
+              maxDate={(() => {
+                let last = [];
+                for (let i = fes.length - 1; last.length === 0; i--) {
+                  last = fes[i].date;
+                }
+                return last[last.length - 1];
+              })()}
               handleFilter={handleFilter}
               handleOn={() => {
                 setPeriodOn(true);
@@ -307,7 +314,7 @@ const LeafMap = ({
 
       layer = L.layerGroup().addTo(map);
     }
-  }, [fes, invalidate]);
+  }, [fes, invalidate, res]);
 
   useEffect(() => {
     if (open) {
