@@ -2,7 +2,6 @@ import L from "leaflet";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import ReactDOMServer from "react-dom/server";
 import getTime from "../lib/getTime";
 import mun from "../seoul_municipalities_geo_simple.json";
 import RangeSlider from "./RangeSlider";
@@ -24,6 +23,15 @@ const getLink = festival => {
       </Link>
     </>
   );
+};
+
+const addLinkToLayer = (festival, layer) => {
+  const div = L.DomUtil.create("div");
+  const link = getLink(festival);
+  ReactDOM.hydrate(link, div);
+  L.marker([festival.y, festival.x])
+    .bindPopup(div)
+    .addTo(layer);
 };
 
 let map, markerLayer, marker, layer;
@@ -137,9 +145,7 @@ const LeafMap = ({
 
     for (let f of fes) {
       if (isInside(f, feature.geometry.coordinates)) {
-        L.marker([f.y, f.x])
-          .bindPopup(ReactDOMServer.renderToString(getLink(f)))
-          .addTo(festLayer);
+        addLinkToLayer(f, festLayer);
       }
     }
     layers.push([layer, festLayer]);
@@ -209,9 +215,7 @@ const LeafMap = ({
               t = (year - 2019) * 12 + (month - 1);
             }
             if (start <= t && t <= end) {
-              L.marker([festival.y, festival.x])
-                .bindPopup(ReactDOMServer.renderToString(getLink(festival)))
-                .addTo(this._layer);
+              addLinkToLayer(festival, this._layer);
             }
           }
           map.addLayer(this._layer);
