@@ -136,7 +136,7 @@ const LeafMap = ({
   const municipalHandler = (feature, layer) => {
     const colorCode =
       colorScheme[
-        [22, 15].includes(feature.properties.ESRI_PK)
+        feature.properties.ESRI_PK === 15 || feature.properties.ESRI_PK === 22
           ? 1
           : feature.properties.ESRI_PK % colorScheme.length
       ];
@@ -277,6 +277,9 @@ const LeafMap = ({
       [37.413294, 126.734086],
       [37.715133, 127.269311]
     ]);
+
+    setPeriodOn(false);
+    
     L.geoJSON(mun, {
       onEachFeature: municipalHandler
     }).addTo(map);
