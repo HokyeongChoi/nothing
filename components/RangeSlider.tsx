@@ -32,8 +32,9 @@ const getNumber = (date: Date): number => {
 
 const getSemantics = (value: number): string => {
   const year = 2019 + ~~(value / 12);
-  const month = (value % 12) + 1;
-  return `${year}.${month}`;
+  let month = String((value % 12) + 1);
+  month = month.length === 2 ? month : "0" + month;
+  return `${year}-${month}`;
 };
 
 const now = getNumber(new Date());
