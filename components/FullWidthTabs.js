@@ -66,6 +66,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
   const resizeHandler = () => {
     setOrientation(window.innerWidth < window.innerHeight);
     setIsWide(window.innerWidth > 1024);
+    setWidth(window.innerWidth);
   };
 
   useEffect(() => {
