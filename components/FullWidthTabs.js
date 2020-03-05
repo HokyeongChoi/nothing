@@ -48,6 +48,8 @@ function a11yProps(index) {
   };
 }
 
+const drawerWidth = 320;
+
 export default function FullWidthTabs({ fe, res, fes }) {
   const [orientation, setOrientation] = useState(1);
   const [disabled, setDisabled] = useState(false);
@@ -64,6 +66,8 @@ export default function FullWidthTabs({ fe, res, fes }) {
   const resizeHandler = () => {
     setOrientation(window.innerWidth < window.innerHeight);
     setIsWide(window.innerWidth > 1024);
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
   };
 
   useEffect(() => {
@@ -236,22 +240,16 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .gridContainer1 {
                     display: grid;
                     grid-template-rows: ${
-                      isWide || !orientation
+                      isWide
                         ? "auto minmax(256px," +
                           Math.min((width - 300 * isWide) / 2, height - 58) +
                           "px)"
                         : "auto auto minmax(256px,100vmin) minmax(256px,100vmin)"
                     };
-                    grid-template-columns: ${
-                      isWide || !orientation ? "1fr 1fr" : "100%"
-                    };
+                    grid-template-columns: ${isWide ? "1fr 1fr" : "100%"};
                 }
                 .info {
-                    ${
-                      isWide || !orientation
-                        ? "grid-row: 1/2; grid-column: 2/3"
-                        : ""
-                    }
+                    ${isWide ? "grid-row: 1/2; grid-column: 2/3" : ""}
                 }
                 .bar {
                     position: relative;
@@ -262,7 +260,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     position: relative;
                     width: 90%;
                     margin: 10px auto;
-                    ${isWide || !orientation ? "grid-column: 2/3;" : ""}
+                    ${isWide ? "grid-column: 2/3;" : ""}
                 }
                 .gridContainer {
                     display: grid;
@@ -283,11 +281,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     overflow: auto;
                 }
                 .info-img {
-                    ${
-                      isWide || !orientation
-                        ? "grid-row: 1/2; grid-column: 1/2;"
-                        : ""
-                    }
+                    ${isWide ? "grid-row: 1/2; grid-column: 1/2;" : ""}
                     display: block;
                     width: 90%;
                     border: solid;
@@ -299,7 +293,11 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 .info-text {
                     display: block;
-                    width: 86%;
+                    width: ${
+                      isWide && width
+                        ? ((width - drawerWidth) / 2) * 0.86 + "px;"
+                        : "86%;"
+                    }
                     margin: 10px auto;
                 }
                 .info-text.text1 {
@@ -311,6 +309,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .info-text.link {
                     text-overflow: ellipsis;
                     overflow: hidden;
+                    white-space: nowrap;
                 }
                 .info-li {
                     list-style-type: none;
@@ -330,7 +329,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                     margin: 1vw;
                 }
                 .fest-list {
-                    max-width: 320px;
+                    width: ${drawerWidth}px;
                     overflow-y: auto;
                     height: ${height - 58}px;
                     // ${isWide ? "" : "display: none;"}
