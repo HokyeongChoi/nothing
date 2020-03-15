@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import getTime from "../lib/getTime";
 import mun from "../seoul_municipalities_geo_simple.json";
 import RangeSlider from "./RangeSlider";
+import FestivalImage from "./FestivalImage";
 
 const getLink = festival => {
   return (
@@ -12,13 +13,7 @@ const getLink = festival => {
       {festival.name} <br />
       <Link href="/p/[id]" as={`/p/${festival.id}&${getTime(festival.date)}`}>
         <a>
-          <picture>
-            <source
-              type="image/webp"
-              srcSet={require(`../public/img/${festival.id}.jpg?webp`)}
-            />
-            <img src={require(`../public/img/${festival.id}.jpg`)} />
-          </picture>
+          <FestivalImage className="" id={festival.id} />
         </a>
       </Link>
     </>
