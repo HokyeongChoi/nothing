@@ -7,7 +7,7 @@ type Props = {
 
 const FestivalImage: React.FC<Props> = ({ className, id }) => {
   const [baseUrl, setBaseUrl] = useState("https://seoul-festival.now.sh/");
-  if (process.browser) {
+  if (typeof window !== 'undefined') {
     useEffect(() => {
       setBaseUrl(window.location.origin);
     }, []);
