@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import fes from "../2019.json";
 import TemporaryDrawer from "../components/TemporaryDrawer.js";
 
-const LeafMap = dynamic(() => import("../components/LeafMap"), {
+const MainMap = dynamic(() => import("../components/MainMap"), {
   ssr: false
 });
 
@@ -31,10 +31,10 @@ const Index = () => {
   return (
     <>
       <div className="root2">
-        <TemporaryDrawer fes={fes} height={height}></TemporaryDrawer>
+        <TemporaryDrawer fes={fes} height={height} />
         <div className="tabs"></div>
       </div>
-      <LeafMap fes={fes} full={true} height={height}></LeafMap>
+      <MainMap fes={fes} height={height} />
       <style jsx global>{`
         body {
           padding: 0;

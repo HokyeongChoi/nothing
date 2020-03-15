@@ -13,6 +13,7 @@ import FestivalList from "./FestivalList";
 import Pie from "./Pie";
 import Restaurant from "./Restaurant";
 import TemporaryDrawer from "./TemporaryDrawer";
+import FestivalImage from "./FestivalImage";
 
 const LeafMap = dynamic(() => import("./LeafMap"), {
   ssr: false
@@ -99,6 +100,20 @@ export default function FullWidthTabs({ fe, res, fes }) {
       overflowY: "auto",
       height: height - 58,
       width: "100%"
+    },
+    infoImgWide: {
+      gridRow: "1/2",
+      gridColumn: "1/2",
+      display: "block",
+      width: "90%",
+      border: "solid",
+      margin: "10px auto"
+    },
+    infoImg: {
+      display: "block",
+      width: "90%",
+      border: "solid",
+      margin: "10px auto"
     }
   }));
 
@@ -152,16 +167,10 @@ export default function FullWidthTabs({ fe, res, fes }) {
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="gridContainer1">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcSet={require(`../public/img/${fe.id}.jpg?webp`)}
-                />
-                <img
-                  src={require(`../public/img/${fe.id}.jpg`)}
-                  className="info-img"
-                />
-              </picture>
+              <FestivalImage
+                className={isWide ? classes.infoImgWide : classes.infoImg}
+                id={fe.id}
+              />
               <div className="info">
                 <p className="info-text info-title">{fe.name}</p>
                 <p className="info-text text1">개최지역: {fe.region}</p>
@@ -279,13 +288,6 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 }
                 .scroll {
                     overflow: auto;
-                }
-                .info-img {
-                    ${isWide ? "grid-row: 1/2; grid-column: 1/2;" : ""}
-                    display: block;
-                    width: 90%;
-                    border: solid;
-                    margin: 10px auto;
                 }
                 .info-text.info-title {
                     font-size: 1.5rem;
