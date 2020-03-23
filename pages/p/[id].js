@@ -1,4 +1,3 @@
-import fetch from "isomorphic-unfetch";
 import ErrorPage from "next/error";
 import fes from "../../2019.json";
 import FullWidthTabs from "../../components/FullWidthTabs";
@@ -47,12 +46,24 @@ const Info = ({ fe, err }) => {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    fetch(`https://a.seoulfestival.shop/restaurants?id=${fe.id}`)
-      .then(res => res.json())
-      .then(res => setRestaurants(res))
-      .catch(_err => {
-        setRestaurants([]);
+    try {
+      const arrRes = [];
+      const places = new kakao.maps.services.Places();
+
+      const callback = function(result, status, pagination) {
+        try {
+          if (status === kakao.maps.services.Status.OK) {
+            arrRes.push(...result);
+            if (pagination.hasNextPage) pagination.nextPage();
+            else setRestaurants(arrRes);
+          }
+        } catch {}
+      };
+
+      places.categorySearch("FD6", callback, {
+        location: new kakao.maps.LatLng(fe.y, fe.x)
       });
+    } catch {}
   }, [fe]);
 
   if (err) {

@@ -59,7 +59,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
 
   const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
-  if (process.browser) {
+  if (typeof window !== "undefined") {
     useEffect(() => setHeight(window.innerHeight), [window.innerHeight]);
     useEffect(() => setWidth(window.innerWidth), [window.innerWidth]);
   }
