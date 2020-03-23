@@ -21,7 +21,7 @@ const LeafMap = ({ fes, res, invalidate, preventSwipe, open }) => {
       map = L.map("map").setView([fes.y, fes.x], 16);
       L.marker([fes.y, fes.x])
         .bindPopup(
-          `${fes.name}<br/><a href="https://map.kakao.com/link/map/${fes.y},${fes.x}" target="_blank">카카오지도</a>`
+          `${fes.name}<br/><a href="https://map.kakao.com/link/map/${fes.y},${fes.x}" target="_blank">카카오맵</a>`
         )
         .addTo(map)
         .openPopup();
