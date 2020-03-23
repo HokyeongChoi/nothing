@@ -1,9 +1,8 @@
 import L from "leaflet";
 import React, { useEffect, useState } from "react";
 
-let map, marker, layer;
-
-let restaurantMarkers = {};
+var map;
+var restaurantMarkers = {};
 
 const LeafMap = ({ fes, res, invalidate, preventSwipe, open }) => {
   const [init, setInit] = useState(true);
@@ -15,21 +14,22 @@ const LeafMap = ({ fes, res, invalidate, preventSwipe, open }) => {
 
   useEffect(() => {
     if (invalidate) {
-      // console.log("invalidate");
       if (!init) {
         map.remove();
         restaurantMarkers = {};
       }
       map = L.map("map").setView([fes.y, fes.x], 16);
-      marker = L.marker([fes.y, fes.x])
-        .bindPopup(fes.name)
+      L.marker([fes.y, fes.x])
+        .bindPopup(
+          `${fes.name}<br/><a href="https://map.kakao.com/link/map/${fes.y},${fes.x}" target="_blank">카카오맵</a>`
+        )
         .addTo(map)
         .openPopup();
 
       for (let r of res) {
         restaurantMarkers[r.id] = L.marker([r.y, r.x], { icon: Icon })
           .bindPopup(
-            `${r.place_name}\n<a href=${r.place_url}>${r.place_url}</a>`
+            `${r.place_name}\n<a href=${r.place_url} target="_blank">${r.place_url}</a>`
           )
           .addTo(map);
       }
@@ -39,8 +39,6 @@ const LeafMap = ({ fes, res, invalidate, preventSwipe, open }) => {
         attribution:
           '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
-
-      layer = L.layerGroup().addTo(map);
     }
   }, [fes, invalidate, res]);
 

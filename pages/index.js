@@ -9,12 +9,8 @@ const MainMap = dynamic(() => import("../components/MainMap"), {
 
 const Index = () => {
   const [height, setHeight] = useState(null);
+  const [init, setInit] = useState(false);
 
-  if (process.browser) {
-    useEffect(() => {
-      setHeight(window.innerHeight);
-    }, [window.innerHeight]);
-  }
 
   const resizeHandler = () => {
     setHeight(window.innerHeight);
@@ -23,6 +19,7 @@ const Index = () => {
   useEffect(() => {
     window.addEventListener("resize", resizeHandler);
     resizeHandler();
+    setInit(true);
     return function cleanup() {
       window.removeEventListener("resize", resizeHandler);
     };
@@ -34,7 +31,7 @@ const Index = () => {
         <TemporaryDrawer fes={fes} height={height} />
         <div className="tabs"></div>
       </div>
-      <MainMap fes={fes} height={height} />
+      {init && <MainMap fes={fes} />}
       <style jsx global>{`
         body {
           padding: 0;
@@ -44,6 +41,11 @@ const Index = () => {
         body {
           height: 100vh;
           width: 100vw;
+        }
+        #map {
+          height: ${height - 48}px;
+          width: 100vw;
+          z-index: 1;
         }
       `}</style>
       <style jsx>{`

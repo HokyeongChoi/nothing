@@ -29,8 +29,6 @@ const addLinkToLayer = (festival, layer) => {
     .addTo(layer);
 };
 
-let map;
-
 function isInside(marker, poly) {
   // console.log(poly[0])
   const polyPoints = poly[0];
@@ -51,18 +49,13 @@ function isInside(marker, poly) {
   return inside;
 }
 
-const MainMap = ({ fes, height }) => {
+const MainMap = ({ fes }) => {
   const [periodOn, setPeriodOn] = useState(false);
   const periodOnRef = useRef(false);
   periodOnRef.current = periodOn;
 
   const style = (
     <style jsx>{`
-      #map {
-        height: ${height - 48}px;
-        width: 100vw;
-        z-index: 1;
-      }
       .mapContainer {
       }
       img {
@@ -74,11 +67,10 @@ const MainMap = ({ fes, height }) => {
       }
     `}</style>
   );
-
+  
   useEffect(() => {
-    if (map) {
-      map.remove();
-    }
+    var map;
+
     map = L.map("map").fitBounds([
       [37.413294, 126.734086],
       [37.715133, 127.269311]
@@ -113,79 +105,78 @@ const MainMap = ({ fes, height }) => {
     const layers = [];
 
     const municipalHandler = (feature, layer) => {
-      const colorCode =
-        colorScheme[
-          feature.properties.ESRI_PK === 15 || feature.properties.ESRI_PK === 22
-            ? 1
-            : feature.properties.ESRI_PK % colorScheme.length
-        ];
-
-      let festIndex = undefined;
-
       layers.push(layer);
+      {
+        let festIndex = undefined;
 
-      const zoomOutHandler = () => {
-        map.fitBounds([
-          [37.413294, 126.734086],
-          [37.715133, 127.269311]
-        ]);
-        if (!periodOnRef.current) {
-          layer.setStyle({
-            fillOpacity: 0.5
-          });
-          for (let i of festIndex) {
-            shadowElts[i].style.display = "none";
-            markerElts[i].style.display = "none";
+        const zoomOutHandler = () => {
+          map.fitBounds([
+            [37.413294, 126.734086],
+            [37.715133, 127.269311]
+          ]);
+          if (!periodOnRef.current) {
+            layer.setStyle({
+              fillOpacity: 0.5
+            });
+            for (let i of festIndex) {
+              shadowElts[i].style.display = "none";
+              markerElts[i].style.display = "none";
+            }
           }
-        }
-        map.removeLayer(layer);
-        for (let l of layers) {
-          map.addLayer(l);
-        }
+          map.removeLayer(layer);
+          for (let l of layers) {
+            map.addLayer(l);
+          }
+          map.removeEventListener("click", zoomOutHandler);
+          layer.addEventListener("click", zoomInHandler);
+        };
 
-        map.removeEventListener("click", zoomOutHandler);
-        layer.addEventListener("click", zoomInHandler);
-      };
-
-      const zoomInHandler = () => {
-        map.fitBounds(layer.getBounds());
-        for (let l of layers) {
-          map.removeLayer(l);
-        }
-
-        map.addLayer(layer);
-        if (!periodOnRef.current) {
-          layer.setStyle({
-            fillOpacity: 0.1
-          });
-
-          if (festIndex === undefined) {
-            festIndex = [];
-            for (let i = 0; i < fes.length; i++) {
-              if (isInside(fes[i], feature.geometry.coordinates)) {
-                festIndex.push(i);
+        const zoomInHandler = () => {
+          map.fitBounds(layer.getBounds());
+          for (let l of layers) {
+            map.removeLayer(l);
+          }
+          map.addLayer(layer);
+          if (!periodOnRef.current) {
+            layer.setStyle({
+              fillOpacity: 0.1
+            });
+            if (festIndex === undefined) {
+              festIndex = [];
+              for (let i = 0; i < fes.length; i++) {
+                if (isInside(fes[i], feature.geometry.coordinates)) {
+                  festIndex.push(i);
+                  shadowElts[i].style.display = "";
+                  markerElts[i].style.display = "";
+                }
+              }
+            } else {
+              for (let i of festIndex) {
                 shadowElts[i].style.display = "";
                 markerElts[i].style.display = "";
               }
             }
-          } else {
-            for (let i of festIndex) {
-              shadowElts[i].style.display = "";
-              markerElts[i].style.display = "";
-            }
           }
-        }
-        layer.removeEventListener("click", zoomInHandler);
-        map.addEventListener("click", zoomOutHandler);
-      };
+          layer.removeEventListener("click", zoomInHandler);
+          map.addEventListener("click", zoomOutHandler);
+        };
 
-      layer.addEventListener("click", zoomInHandler);
-
-      layer.setStyle({
-        color: colorCode,
-        fillColor: colorCode,
-        fillOpacity: 0.5
-      });
+        layer.addEventListener("click", zoomInHandler);
+      }
+      {
+        const colorCode =
+          colorScheme[
+            feature.properties.ESRI_PK === 15 ||
+            feature.properties.ESRI_PK === 22
+              ? 1
+              : feature.properties.ESRI_PK % colorScheme.length
+          ];
+        layer.setStyle({
+          color: colorCode,
+          fillColor: colorCode,
+          fillOpacity: 0.5
+        });
+      }
     };
 
     const addControlTo = map => {
@@ -277,7 +268,7 @@ const MainMap = ({ fes, height }) => {
     }).addTo(map);
 
     addControlTo(map);
-  }, [height]);
+  }, []);
 
   return (
     <>
