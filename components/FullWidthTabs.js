@@ -16,7 +16,7 @@ import TemporaryDrawer from "./TemporaryDrawer";
 import FestivalImage from "./FestivalImage";
 
 const LeafMap = dynamic(() => import("./LeafMap"), {
-  ssr: false
+  ssr: false,
 });
 
 function TabPanel(props) {
@@ -39,13 +39,13 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
 
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`
+    "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
 
@@ -83,23 +83,23 @@ export default function FullWidthTabs({ fe, res, fes }) {
     setOpen(null);
   }, [fe]);
 
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme) => ({
     root: {
       backgroundColor: theme.palette.background.paper,
-      width: "100vw"
+      width: "100vw",
     },
     root2: {
       flexDirection: "row",
       position: "sticky",
-      top: 0
+      top: 0,
     },
     tabs: {
-      flexGrow: 0.9
+      flexGrow: 0.9,
     },
     panel: {
       overflowY: "auto",
       height: height - 58,
-      width: "100%"
+      width: "100%",
     },
     infoImgWide: {
       gridRow: "1/2",
@@ -107,14 +107,14 @@ export default function FullWidthTabs({ fe, res, fes }) {
       display: "block",
       width: "90%",
       border: "solid",
-      margin: "10px auto"
+      margin: "10px auto",
     },
     infoImg: {
       display: "block",
       width: "90%",
       border: "solid",
-      margin: "10px auto"
-    }
+      margin: "10px auto",
+    },
   }));
 
   const classes = useStyles();
@@ -125,7 +125,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
     setValue(newValue);
   };
 
-  const handleChangeIndex = index => {
+  const handleChangeIndex = (index) => {
     setValue(index);
   };
 
@@ -181,7 +181,10 @@ export default function FullWidthTabs({ fe, res, fes }) {
                   </p>
                 )}
                 <p className="info-text text3">
-                  {fe.explanation.replace(/(\\(n|t))/g, "")}
+                  {"\n" +
+                    fe.detail
+                      .replace(/(\\(n|t))/g, "")
+                      .replace(/(^(\n|\t)+)/g, "")}
                 </p>
               </div>
               <div className="bar">
@@ -199,12 +202,12 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 res={res}
                 key={value === 1}
                 invalidate={value === 1}
-                preventSwipe={b => setDisabled(b)}
+                preventSwipe={(b) => setDisabled(b)}
                 open={open}
               />
               <div className="scroll">
                 <ul className="ul">
-                  {res.map(res => (
+                  {res.map((res) => (
                     <li
                       className="info-li"
                       key={res.id}
@@ -307,6 +310,7 @@ export default function FullWidthTabs({ fe, res, fes }) {
                 .info-text.text2 {
                 }
                 .info-text.text3 {
+                  white-space: pre-wrap;
                 }
                 .info-text.link {
                     text-overflow: ellipsis;
